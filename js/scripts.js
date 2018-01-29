@@ -20,10 +20,11 @@ function Birch() {
 	geometry.translate(0, .5, 0);
 
 	var trunkMesh = new THREE.Mesh(geometry, birchBark);
-	var trunkGroup = new THREE.Group();
-	trunkGroup.add(trunkMesh);
+	this.treeObject = new THREE.Group();
+	console.log(this.treeObject);
+	this.treeObject.add(trunkMesh);
 
-	this.trunk = new Section(trunkGroup, trunkMesh, 5);
+	this.trunk = new Section(this.treeObject, trunkMesh, 5);
 
 	this.branches = [];
 
@@ -35,7 +36,6 @@ function Birch() {
 		geometry.translate(0, .5, 0);
 
 		var branchMesh = new THREE.Mesh(geometry, birchBark);
-		branchMesh.scale
 		var branchGroup = new THREE.Group();
 		branchGroup.add(branchMesh);
 
@@ -55,7 +55,7 @@ function Birch() {
 	};
 	
 	var depth = 0;
-	var maxDepth = 7;
+	var maxDepth = 6;
 //this should allow us to setup different rules for different mesh types, triggering on different conditions, but the time stuff is
 	this.updateSection = function(section) {
 		depth++;
@@ -97,7 +97,7 @@ $(document).ready(function() {
 	
 	//setup camera
 	var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-	camera.position.set(0, 2, 25);
+	camera.position.set(0, 2, 20);
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
 	
 	
@@ -121,7 +121,7 @@ $(document).ready(function() {
 	//setup animation loop
 	function animate() {
 		birch.updateSection(birch.trunk);
-		
+		birch.treeObject.rotation.y += 0.03;
 		requestAnimationFrame(animate);
 		renderer.render(scene, camera);
 	};
