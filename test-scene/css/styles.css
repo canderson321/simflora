@@ -1,0 +1,23 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	height: 100%;
+	width: 100%;
+}
+canvas {
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	height: 100%;
+	width: 100%;
+}
+
+
+.container {
+	display: none;
+}
+
+#msg {
+	display: none;
+}
