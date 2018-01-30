@@ -66,7 +66,7 @@ $(document).ready(function() {
 
 	//setup camera
 	var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-	camera.position.set(0, 5, 17);
+	camera.position.set(0, 3, 25);
 	camera.lookAt(new THREE.Vector3(0, 5, 0));
 
 
@@ -81,6 +81,46 @@ $(document).ready(function() {
 	directionalLight.rotation.y += 35;
 	scene.add( directionalLight );
 	scene.add( light );
+
+	//Set up sun and moon light sources
+	var sunGeometry = new THREE.SphereGeometry( .4, 16, 16 );
+	var sunLight = new THREE.PointLight( 0xffffee, 1, 100, 2 );
+	var sunMaterial = new THREE.MeshStandardMaterial( {
+		emissive: 0xffffee,
+		emissiveIntensity: 1,
+		color: 0x000000
+	});
+	sunLight.add( new THREE.Mesh( sunGeometry, sunMaterial ));
+	sunLight.position.set( 0, 10, 0 );
+	sunLight.castShadow = true;
+	scene.add( sunLight );
+
+	var moonGeometry = new THREE.SphereGeometry( .2 )
+	var moonLight = new THREE.PointLight( 0x9badff, 1, 100, 2 )
+	var moonMaterial = new THREE.MeshStandardMaterial( {
+		emissive: 0xffffee,
+		emissiveIntensity: .2,
+		color: 0x000000
+	});
+	moonLight.add( new THREE.Mesh( moonGeometry, moonMaterial ));
+	moonLight.position.set( 0, -10, 0 );
+	scene.add( moonLight );
+
+	//make sun clickable
+	var domEvents   = new THREEx.DomEvents(camera, renderer.domElement)
+	var sunClicked = false;
+	domEvents.addEventListener(sunLight, 'click', function(event) {
+		if (sunClicked === false) {
+			sunClicked = true;
+		} else {
+			sunClicked = false;
+		}
+	})
+
+	//add mouse control
+	var controls = new THREE.OrbitControls( camera );
+	controls.addEventListener( 'change', function() { renderer.render(scene, camera); } );
+
 
 	//make new birch object, add it's trunk mesh to scene
 	var tree = new Tree(BirchPart);
@@ -100,8 +140,8 @@ $(document).ready(function() {
 	topGeometry.computeVertexNormals();
 	var bottomGeometry = new THREE.LatheGeometry( bottomPoints );
 
-	var topMaterial = new THREE.MeshStandardMaterial( { color: 0xa1ba32 } );
-	var bottomMaterial = new THREE.MeshStandardMaterial( { color: 0x4d3d34 } );
+	var topMaterial = new THREE.MeshLambertMaterial( { color: 0xa1ba32 } );
+	var bottomMaterial = new THREE.MeshLambertMaterial( { color: 0x917054 } );
 	var top = new THREE.Mesh( topGeometry, topMaterial );
 	// var helper = new THREE.FaceNormalsHelper(top, 2, 0x00ff00, 1 );
 	// var helper = new THREE.VertexNormalsHelper(top, 2, 0x00ff00, 1 );
@@ -117,11 +157,25 @@ $(document).ready(function() {
 	// scene.add(helper);
 
 	//setup animation loop
+	var t = 0;
 	function animate() {
 		tree.updateSection(tree.trunk);
 		tree.trunk.group.rotation.y += 0.005;
 		requestAnimationFrame(animate);
 		renderer.render(scene, camera);
+
+		// if (sunClicked === true) {
+			t += 0.01;
+			light.intensity = Math.sin(t);
+			sunLight.intensity = Math.sin(t) + .5;
+			moonLight.intensity = -Math.sin(t) + .5;
+			sunLight.position.x = 10*Math.cos(t) + 0;
+			sunLight.position.y = 10*Math.sin(t) + 0;
+
+			moonLight.position.x = -10*Math.cos(t) + 0;
+			moonLight.position.y = -10*Math.sin(t) + 0;
+		// }
+
 	};
 	animate();
 });
