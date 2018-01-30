@@ -1,11 +1,12 @@
 
 function Time() {
+	var daysPerSeason = 8;
 	this.dayRad = 0;
 	this.seasonRad = 0;
 	
 	this.update = function() {
 		this.dayRad = ((Date.now() / 1000) % 2) * Math.PI;
-		this.seasonRad = ((Date.now() / 8000) % 2) * Math.PI;
+		this.seasonRad = ((Date.now() / (1000 * daysPerSeason)) % 2) * Math.PI;
 		
 		//console.log(this.dayRad);
 	}

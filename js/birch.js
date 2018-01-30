@@ -89,8 +89,11 @@ BirchPart.prototype.update = function(time) {
 	
 	var heightFactor = this.lengthFactor;
 	if (this.type === "leaf") {
-		if (time.seasonRad > 5 * Math.PI / 4 && time.seasonRad < (7 * Math.PI / 4)) {
+		if (time.seasonRad > 5 * Math.PI / 4 && this.leafState === "grow") {
+			this.leafState = "fall";
+		} else if (time.seasonRad < (7 * Math.PI / 4) && time.leafState === "fall") {
 			this.timestamp = Date.now();
+			this.leafState = "grow"
 		}
 	}
 		
@@ -109,7 +112,15 @@ BirchPart.prototype.update = function(time) {
 
 	var self = this;
 	self.childParts.forEach(function(childPart) {
-		childPart.group.position.y = growthFactor * heightFactor;
 		childPart.update(time);
+		if (childPart.type === "leaf") {
+			if (childPart.leafState === "grow") {
+				childPart.group.position.y = growthFactor * heightFactor;
+			} else {
+				childPart.group.position.y -= 0.1;
+			}
+		} else {
+			childPart.group.position.y = growthFactor * heightFactor;
+		}
 	});
 };
