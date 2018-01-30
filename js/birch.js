@@ -34,18 +34,30 @@ function BirchPart(level) {
 		this.minBranchAngle = 25;
 		this.maxBranchAngle = 65;
 		
-	} else if (this.level === 6) {
+	} else if (this.level === 5) {
 		
 		material = new THREE.MeshLambertMaterial( {color: 0xe8d8c1} );
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
-		this.numBranches = 0;
+		this.numBranches = 3;
 		this.straight = true;
+		this.minBranchAngle = 90;
+		this.maxBranchAngle = 90;
 		
 	} else {
 		
 		material = new THREE.MeshStandardMaterial( {color: 0x00ff00} );
-		geometry = new THREE.BoxGeometry( 0.25, 0.5, 0.00001 );
-		geometry.translate(0, -0.25, 0);
+		material.side = THREE.DoubleSide;
+		
+		geometry = new THREE.Geometry();
+		geometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) );
+		geometry.vertices.push( new THREE.Vector3( -0.2, 0.1, 0 ) );
+		geometry.vertices.push( new THREE.Vector3( 0, 0.5, 0 ) );
+		geometry.vertices.push( new THREE.Vector3( 0.2, 0.1, 0 ) );
+		
+		geometry.faces.push( new THREE.Face3( 0, 1, 2 ) ); // counter-clockwise winding order
+		geometry.faces.push( new THREE.Face3( 0, 2, 3 ) );
+		geometry.translate(0, -0.5, 0);
+		
 		this.numBranches = 0;
 		this.straight = false;
 		
