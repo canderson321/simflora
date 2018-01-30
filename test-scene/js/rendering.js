@@ -51,7 +51,7 @@ function Graphics() {
 	var branchScale = 0.7;
 
 	//Creates a single 'stickObject' (cylinder) to build the tree out of
-	var brown = new THREE.MeshLambertMaterial( {color: 0x49311C} );
+	var brown = new THREE.MeshStandardMaterial( {color: 0x49311C} );
 	var geometry = new THREE.CylinderGeometry( branchScale * 0.1, 0.1, 1, 12, 1, false );
 	geometry.translate(0, 0.5, 0);
 	var cylinder = new THREE.Mesh( geometry, brown );
@@ -61,7 +61,14 @@ function Graphics() {
 	geometry.translate(0, 0.5, 0);
 	var leaf = new THREE.Mesh( geometry, green );
 
-
+	//ground plane
+	var groundGeometry = new THREE.CircleGeometry( 3, 32 );
+	var groundMaterial = new THREE.MeshLambertMaterial( { color: 0x564a36 });
+	groundMaterial.side = THREE.DoubleSide;
+	var ground = new THREE.Mesh( groundGeometry, groundMaterial );
+	ground.position.set( 0, -1.5, 0);
+	ground.rotation.x = (-Math.PI/2);
+	scene.add( ground );
 
 	//Building tree and adding it to the scene
 	var tree = getTree(7, cylinder, leaf, branchScale);
@@ -70,15 +77,17 @@ function Graphics() {
 	console.log(count);
 
 	//Setting up lighting
-	var light = new THREE.AmbientLight( 0x606060, 0.01 );
+	var daylight = new THREE.AmbientLight( 0x606060, 0.01 );
+
 	var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.01 );
 	directionalLight.rotation.x -= 35;
 	directionalLight.rotation.y += 35;
 	scene.add( directionalLight );
-	scene.add( light );
+	scene.add( daylight );
+
 
 	var sunGeometry = new THREE.SphereGeometry( .2, 16, 16 );
-	var sunLight = new THREE.PointLight( 0xffd800, 1, 100, 1.1 );
+	var sunLight = new THREE.PointLight( 0xffffee, 1, 100, 2 );
 	var sunMaterial = new THREE.MeshStandardMaterial( {
 		emissive: 0xffffee,
 		emissiveIntensity: 1,
@@ -86,12 +95,23 @@ function Graphics() {
 	});
 
 	sunLight.add( new THREE.Mesh( sunGeometry, sunMaterial ));
-	sunLight.position.set( 2, 0, 0 );
-	sunLight.translateY( 3 );
-	//sunLight.castShadow = true;
+	sunLight.position.set( 0, 3, 0 );
+
+	sunLight.castShadow = true;
 	scene.add( sunLight );
 
-	
+	var moonGeometry = new THREE.SphereGeometry( .1 )
+	var moonLight = new THREE.PointLight( 0x9badff, 1, 100, 2 )
+	var moonMaterial = new THREE.MeshStandardMaterial( {
+		emissive: 0xffffee,
+		emissiveIntensity: .2,
+		color: 0x000000
+	});
+
+	moonLight.add( new THREE.Mesh( moonGeometry, moonMaterial ));
+	moonLight.position.set( 0, -3, 0 );
+	scene.add( moonLight );
+
 
 
 	//add mouse control
@@ -102,15 +122,24 @@ function Graphics() {
 	var count = 0;
 	var self = this;
 	var t = 0;
+
+	
 	Graphics.prototype.animate = function() {
 		requestAnimationFrame( self.animate );
 		renderer.render( scene, camera );
 		//tree.rotation.y += 0.003;
 
 		t += 0.01;
-		light.intensity = Math.sin(t);
+		daylight.intensity = Math.sin(t);
+		sunLight.intensity = Math.sin(t) + .5;
+		moonLight.intensity = -Math.sin(t) + .5;
 		sunLight.position.x = 3*Math.cos(t) + 0;
-	  sunLight.position.y = 3*Math.sin(t) + 0
+	  sunLight.position.y = 3*Math.sin(t) + 0;
+
+		moonLight.position.x = -3*Math.cos(t) + 0;
+		moonLight.position.y = -3*Math.sin(t) + 0;
+
+
 
 		// count++;
 		// tree.scale.set(1 + count/10000.0, 1 + count/10000.0, 1 + count/10000.0);
