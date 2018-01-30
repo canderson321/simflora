@@ -1,13 +1,16 @@
+function rotateAndTilt(x, y) {
+	return new THREE.Euler(x * Math.PI / 180, y * Math.PI / 180, 0, 'YXZ');
+};
 
 function Time() {
 	var daysPerSeason = 8;
 	this.dayRad = 0;
 	this.seasonRad = 0;
-	
+
 	this.update = function() {
 		this.dayRad = ((Date.now() / 1000) % 2) * Math.PI;
 		this.seasonRad = ((Date.now() / (1000 * daysPerSeason)) % 2) * Math.PI;
-		
+
 		console.log(this.seasonRad);
 	}
 }
@@ -28,8 +31,13 @@ $(document).ready(function() {
 
 	var maple = new MaplePart(undefined);
 	scene.add(maple.group);
+
 	var soil = new Soil();
-	scene.add(soil.group)
+	scene.add(soil.group);
+
+	var roots = new RootPart(undefined);
+	roots.group.rotation.x = Math.PI;
+	scene.add(roots.group);
 
 
 	// var domEvents   = new THREEx.DomEvents(camera, renderer.domElement)
@@ -41,7 +49,7 @@ $(document).ready(function() {
 	// 		sunClicked = false;
 	// 	}
 	// })
-	
+
 	var time = new Time();
 
 	var controls = new THREE.OrbitControls(camera);
@@ -52,6 +60,7 @@ $(document).ready(function() {
 		scene.rotation.y += 0.002;
 		time.update();
 		maple.update(time);
+		roots.update(time);
 		lighting.update();
 		renderer.render(scene, camera);
 	};
