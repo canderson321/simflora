@@ -6,10 +6,10 @@ function rotateAndTilt(x, y) {
 
 //we'd make one of these constructors for every plant type
 function Tree(Type) {
-	
-	this.trunk = new Type(0);	
 
-	
+	this.trunk = new Type(0);
+
+
 	//we'd make one of these for every type of obj eg trunk, branch, twig, leaf
 	this.newBranch = function(parentPart) {
 
@@ -24,17 +24,17 @@ function Tree(Type) {
 		branch.group.position.y = parentPart.height;
 
 	};
-	
+
 	var depth = 0;
 //this should allow us to setup different rules for different mesh types, triggering on different conditions, but the time stuff is
 	this.updateSection = function(part) {
 		depth++;
 		var age = (Date.now() - part.timestamp + 1)/1000;
-		
+
 		part.height = Math.log(age / part.branchTime + 1) / depth;
-		
+
 		part.mesh.scale.set(part.height, part.height, part.height);
-		
+
 		if (part.straight) {
 			this.newBranch(part);
 			part.straight = false;;
@@ -44,7 +44,7 @@ function Tree(Type) {
 		while (age > part.branchTime && part.childParts.length < part.numBranches && depth < 7) {
 			this.newBranch(part);
 		};
-		
+
 		var self = this;
 		part.childParts.forEach(function(childSection) {
 			childSection.group.position.y = part.height;
@@ -62,18 +62,18 @@ $(document).ready(function() {
 	var renderer = new THREE.WebGLRenderer();
 	renderer.setSize( window.innerWidth, window.innerHeight);
 	document.body.appendChild( renderer.domElement);
-	
-	
+
+
 	//setup camera
 	var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 	camera.position.set(0, 5, 17);
 	camera.lookAt(new THREE.Vector3(0, 5, 0));
-	
-	
+
+
 	//setup scene
 	var scene = new THREE.Scene();
-	
-	
+
+
 	//Setting up lighting
 	var light = new THREE.AmbientLight( 0x606060 );
 	var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
@@ -85,8 +85,36 @@ $(document).ready(function() {
 	//make new birch object, add it's trunk mesh to scene
 	var tree = new Tree(BirchPart);
 	scene.add(tree.trunk.group);
-	
 
+	//make lathe
+	var topPoints = [];
+	for ( var i = 10; i >= 0; i-- ) {
+		topPoints.push(new THREE.Vector2(i, Math.cos(Math.PI/20*i)));
+	}
+	var bottomPoints = [];
+	for ( var i = 0; i <= 10; i++ ) {
+		bottomPoints.push(new THREE.Vector2(i, -2*(1+Math.cos(Math.PI/10*i))));
+	}
+	var topGeometry = new THREE.LatheGeometry( topPoints );
+	topGeometry.computeFaceNormals();
+	topGeometry.computeVertexNormals();
+	var bottomGeometry = new THREE.LatheGeometry( bottomPoints );
+
+	var topMaterial = new THREE.MeshStandardMaterial( { color: 0xa1ba32 } );
+	var bottomMaterial = new THREE.MeshStandardMaterial( { color: 0x4d3d34 } );
+	var top = new THREE.Mesh( topGeometry, topMaterial );
+	// var helper = new THREE.FaceNormalsHelper(top, 2, 0x00ff00, 1 );
+	// var helper = new THREE.VertexNormalsHelper(top, 2, 0x00ff00, 1 );
+
+
+	var bottom = new THREE.Mesh( bottomGeometry, bottomMaterial );
+
+	var soil = new THREE.Group();
+	soil.add(top);
+	soil.add(bottom);
+	soil.scale.set(.3, .3, .3)
+	scene.add( soil );
+	// scene.add(helper);
 
 	//setup animation loop
 	function animate() {
