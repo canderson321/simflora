@@ -8,19 +8,16 @@ function BirchPart(parentPart) {
 	this.group = new THREE.Group();
 	this.mesh;
 
-	this.branchTime = 2;
-	this.numBranches = 4;
+	this.terminalAge = 2;
 	this.straight = true;
-	this.minBranchAngle = 25;
-	this.maxBranchAngle = 50;
 
 	if (parentPart === undefined) {
 		this.level = 1;
 	} else {
 		this.level = parentPart.level + 1;
 		parentPart.group.add(this.group);
-		var minAngle = parentPart.minBranchAngle;
-		var maxAngle = parentPart.maxBranchAngle;
+		var minAngle = parentPart.minAngle;
+		var maxAngle = parentPart.maxAngle;
 		this.group.quaternion.setFromEuler(rotateAndTilt(Math.random() * (maxAngle-minAngle) + minAngle, Math.random() * 360));
 	};
 	console.log(this.level);
@@ -30,25 +27,27 @@ function BirchPart(parentPart) {
 	if (this.level === 0) {
 		material = new THREE.MeshLambertMaterial( {color: 0xe8d8c1} );
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
-		this.branchTime = 5;
+		this.terminalAge = 5;
 		this.numBranches = 5;
+		this.minAngle = 25;
+		this.maxAngle = 50;
 
-	} else if (this.level < 5) {
+	} else if (this.level < 6) {
 
 		material = new THREE.MeshLambertMaterial( {color: 0xe8d8c1} );
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
 		this.numBranches = 3
-		this.minBranchAngle = 25;
-		this.maxBranchAngle = 65;
+		this.minAngle = 25;
+		this.maxAngle = 65;
 
-	} else if (this.level === 5) {
+	} else if (this.level === 6) {
 
 		material = new THREE.MeshLambertMaterial( {color: 0xe8d8c1} );
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
 		this.numBranches = 3;
 		this.straight = true;
-		this.minBranchAngle = 90;
-		this.maxBranchAngle = 90;
+		this.minAngle = 90;
+		this.maxAngle = 90;
 
 	} else {
 
@@ -57,9 +56,9 @@ function BirchPart(parentPart) {
 
 		geometry = new THREE.Geometry();
 		geometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) );
-		geometry.vertices.push( new THREE.Vector3( -0.2, 0.1, 0 ) );
-		geometry.vertices.push( new THREE.Vector3( 0, 0.5, 0 ) );
-		geometry.vertices.push( new THREE.Vector3( 0.2, 0.1, 0 ) );
+		geometry.vertices.push( new THREE.Vector3( -0.4, 0.2, 0 ) );
+		geometry.vertices.push( new THREE.Vector3( 0, 1, 0 ) );
+		geometry.vertices.push( new THREE.Vector3( 0.4, 0.2, 0 ) );
 
 		geometry.faces.push( new THREE.Face3( 0, 1, 2 ) ); // counter-clockwise winding order
 		geometry.faces.push( new THREE.Face3( 0, 2, 3 ) );
@@ -76,7 +75,7 @@ function BirchPart(parentPart) {
 
 BirchPart.prototype.update = function() {
 	var age = (Date.now() - this.timestamp + 1)/1000;
-	var growthFactor = Math.log(age / this.branchTime + 1) / this.level;
+	var growthFactor = Math.log(age / this.terminalAge + 1) / this.level;
 
 	this.mesh.scale.set(growthFactor, growthFactor, growthFactor);
 
@@ -85,7 +84,7 @@ BirchPart.prototype.update = function() {
 		this.straight = false;;
 	};
 
-	while (age > this.branchTime && this.childParts.length < this.numBranches && this.level < 7) {
+	while (age > this.terminalAge && this.childParts.length < this.numBranches && this.level <= 7) {
 		this.childParts.push(new BirchPart(this));
 	};
 

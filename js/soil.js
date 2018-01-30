@@ -13,14 +13,14 @@ function Soil() {
 	topGeometry.computeVertexNormals();
 	var bottomGeometry = new THREE.LatheGeometry( bottomPoints );
 
-	var topMaterial = new THREE.MeshLambertMaterial( { color: 0xa1ba32 } );
+	var topMaterial = new THREE.MeshLambertMaterial( { color: 0x79bd49 } );
 	var bottomMaterial = new THREE.MeshLambertMaterial( { color: 0x917054 } );
-	var top = new THREE.Mesh( topGeometry, topMaterial );
 
+	var top = new THREE.Mesh( topGeometry, topMaterial );
 	var bottom = new THREE.Mesh( bottomGeometry, bottomMaterial );
 
 	this.group = new THREE.Group();
 	this.group.add(top);
 	this.group.add(bottom);
-	this.group.scale.set(.3, .3, .3)
+	this.group.scale.set(.35, .35, .35)
 };

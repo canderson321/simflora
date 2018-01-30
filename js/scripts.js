@@ -9,16 +9,9 @@ $(document).ready(function() {
 
 	var scene = new THREE.Scene();
 
-	var light = new THREE.AmbientLight(0x606060);
-	var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-	directionalLight.rotation.x = 35;
-	directionalLight.rotation.y = 35;
-	scene.add(directionalLight);
-	scene.add(light);
+	var lighting = new Lighting();
+	scene.add(lighting.group);
 
-	var sunMoon = new SunMoon(light);
-	scene.add(sunMoon.sunLight);
-	scene.add(sunMoon.moonLight);
 	var birch = new BirchPart(undefined);
 	scene.add(birch.group);
 	var soil = new Soil();
@@ -42,7 +35,7 @@ $(document).ready(function() {
 		requestAnimationFrame(animate);
 		scene.rotation.y += 0.002;
 		birch.update();
-		sunMoon.update();
+		lighting.update();
 		renderer.render(scene, camera);
 	};
 	animate();
