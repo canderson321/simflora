@@ -8,7 +8,7 @@ function Time() {
 		this.dayRad = ((Date.now() / 1000) % 2) * Math.PI;
 		this.seasonRad = ((Date.now() / (1000 * daysPerSeason)) % 2) * Math.PI;
 		
-		//console.log(this.dayRad);
+		console.log(this.seasonRad);
 	}
 }
 
@@ -26,8 +26,8 @@ $(document).ready(function() {
 	var lighting = new Lighting();
 	scene.add(lighting.group);
 
-	var birch = new BirchPart(undefined);
-	scene.add(birch.group);
+	var maple = new MaplePart(undefined);
+	scene.add(maple.group);
 	var soil = new Soil();
 	scene.add(soil.group)
 
@@ -51,7 +51,7 @@ $(document).ready(function() {
 		requestAnimationFrame(animate);
 		scene.rotation.y += 0.002;
 		time.update();
-		birch.update(time);
+		maple.update(time);
 		lighting.update();
 		renderer.render(scene, camera);
 	};
