@@ -1,3 +1,16 @@
+
+function Time() {
+	this.dayRad = 0;
+	this.seasonRad = 0;
+	
+	this.update = function() {
+		this.dayRad = ((Date.now() / 1000) % 2) * Math.PI;
+		this.seasonRad = ((Date.now() / 8000) % 2) * Math.PI;
+		
+		//console.log(this.dayRad);
+	}
+}
+
 $(document).ready(function() {
 	var renderer = new THREE.WebGLRenderer();
 	renderer.setSize( window.innerWidth, window.innerHeight);
@@ -27,6 +40,8 @@ $(document).ready(function() {
 	// 		sunClicked = false;
 	// 	}
 	// })
+	
+	var time = new Time();
 
 	var controls = new THREE.OrbitControls(camera);
 	controls.addEventListener('change', function() {renderer.render(scene, camera);});
@@ -34,7 +49,8 @@ $(document).ready(function() {
 	function animate() {
 		requestAnimationFrame(animate);
 		scene.rotation.y += 0.002;
-		birch.update();
+		time.update();
+		birch.update(time);
 		lighting.update();
 		renderer.render(scene, camera);
 	};
