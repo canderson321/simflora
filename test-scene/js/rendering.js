@@ -121,23 +121,35 @@ function Graphics() {
 	//Animation Loop
 	var count = 0;
 	var self = this;
-	var t = 0;
+	var t = Math.PI/2;
 
-	
+	var domEvents   = new THREEx.DomEvents(camera, renderer.domElement)
+	var sunClicked = false;
+	domEvents.addEventListener(sunLight, 'click', function(event) {
+		if (sunClicked === false) {
+			sunClicked = true;
+		} else {
+			sunClicked = false;
+		}
+	})
+
 	Graphics.prototype.animate = function() {
 		requestAnimationFrame( self.animate );
 		renderer.render( scene, camera );
 		//tree.rotation.y += 0.003;
 
-		t += 0.01;
-		daylight.intensity = Math.sin(t);
-		sunLight.intensity = Math.sin(t) + .5;
-		moonLight.intensity = -Math.sin(t) + .5;
-		sunLight.position.x = 3*Math.cos(t) + 0;
-	  sunLight.position.y = 3*Math.sin(t) + 0;
 
-		moonLight.position.x = -3*Math.cos(t) + 0;
-		moonLight.position.y = -3*Math.sin(t) + 0;
+		if (sunClicked === true) {
+			t += 0.01;
+			daylight.intensity = Math.sin(t);
+			sunLight.intensity = Math.sin(t) + .5;
+			moonLight.intensity = -Math.sin(t) + .5;
+			sunLight.position.x = 3*Math.cos(t) + 0;
+		  sunLight.position.y = 3*Math.sin(t) + 0;
+
+			moonLight.position.x = -3*Math.cos(t) + 0;
+			moonLight.position.y = -3*Math.sin(t) + 0;
+		}
 
 
 
