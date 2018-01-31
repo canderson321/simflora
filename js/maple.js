@@ -31,7 +31,7 @@ function MaplePart(parentPart) {
 		material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
 		this.terminalAge = 5;
-		this.numChildren = 5;
+		this.numChildren = 3;
 		this.minAngle = 25;
 		this.maxAngle = 50;
 		this.lengthFactor = 0.8;
@@ -41,10 +41,11 @@ function MaplePart(parentPart) {
 
 		material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
-		this.numChildren = 3
+		this.numChildren = 4;
 		this.minAngle = 25;
 		this.maxAngle = 65;
 		this.type = "branch";
+		this.widthFactor = 0.6;
 
 	} else if (this.level === 5) {
 
@@ -54,7 +55,8 @@ function MaplePart(parentPart) {
 		this.straight = true;
 		this.minAngle = 90;
 		this.maxAngle = 90;
-		this.widthFactor = 0.5;
+		this.widthFactor = 0.3;
+		this.lengthFactor = 0.6;
 		this.type = "twig";
 
 	} else {
@@ -118,11 +120,13 @@ MaplePart.prototype.update = function(time) {
 
 	var heightFactor = this.lengthFactor;
 	if (this.type === "leaf") {
-		if (time.seasonRad > 5 * Math.PI / 4 && this.leafState === "grow") {
+		if (time.seasonRad > 5 * Math.PI / 4 && time.seasonRad <= (7 * Math.PI / 4) && this.leafState === "grow" && Math.random() < 0.01) {
 			this.leafState = "fall";
-		} else if (time.seasonRad < (7 * Math.PI / 4) && time.leafState === "fall") {
+		} else if (time.seasonRad > (7 * Math.PI / 4) && this.leafState === "fall") {
 			this.timestamp = Date.now();
 			this.leafState = "grow"
+			var age = (Date.now() - this.timestamp + 1)/1000;
+			var growthFactor = Math.log(age / this.terminalAge + 1) / this.level;
 		}
 	}
 
@@ -142,13 +146,23 @@ MaplePart.prototype.update = function(time) {
 	var self = this;
 	self.childParts.forEach(function(childPart) {
 		childPart.update(time);
+		
 		if (childPart.type === "leaf") {
-			if (childPart.leafState === "grow" || true) {
-				childPart.group.position.y = growthFactor * heightFactor;
-			} else {
 
-				childPart.group.position += childPart.group.localToWorld( new THREE.Vector3( 0, -1, 0 ) );
+			if (childPart.leafState === "fall") {
+				var worldVec = new THREE.Vector3(0, -1, 0);
+				var localVec = self.group.worldToLocal( worldVec );
+				localVec.normalize();
+				childPart.group.position.x += localVec.x * 0.05;
+				childPart.group.position.y += localVec.y * 0.05;
+				childPart.group.position.z += localVec.z * 0.05;
+				
+			} else {
+				childPart.group.position.y = growthFactor * heightFactor;
+				childPart.group.position.x = 0;
+				childPart.group.position.z = 0;
 			}
+			
 		} else {
 			childPart.group.position.y = growthFactor * heightFactor;
 		}
