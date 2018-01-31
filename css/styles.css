@@ -6,3 +6,20 @@ canvas {
 	height: 100%;
 	width: 100%;
 }
+
+#welcome {
+	width: 100%;
+	background-color: rgba(0, 0, 0, .7);
+	top: 40%;
+	position: fixed;
+	z-index:10;
+	padding: 40px;
+}
+
+#welcomeContent {
+	width: 60%;
+	margin-left: 20%;
+	color: whitesmoke;
+	text-align: center;
+	
+}
