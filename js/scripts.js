@@ -37,7 +37,14 @@ function Time() {
 	this.update();
 }
 
+var growthStart = false;
+
 $(document).ready(function() {
+	document.getElementById('hideMessage').addEventListener( 'click', function(event) {
+		growthStart = true;
+		document.getElementById('welcome').style.display = 'none';
+	})
+
 	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize( window.innerWidth, window.innerHeight);
 	// renderer.shadowMapEnabled = true;
