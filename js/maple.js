@@ -124,15 +124,16 @@ function MaplePart(parentPart, type) {
 };
 
 MaplePart.prototype.update = function(time, lastTime) {
-	
-	
-	if(time.currentSeason !== "FA" && time.currentSeason !== "WI") {
-		this.age = this.age + (Date.now() - lastTime + 1)/1000;
-	} else {
-		this.age = this.age + (Date.now() - lastTime + 1)/10000;
-	}
-	
-	
+
+
+	// if(time.currentSeason !== "FA" && time.currentSeason !== "WI") {
+	// 	this.age = this.age + (Date.now() - lastTime + 1)/1000;
+	// } else {
+	// 	this.age = this.age + (Date.now() - lastTime + 1)/10000;
+	// }
+	var growthiness = Math.sin(Math.PI*3/8 + time.seasonRad) + .3;
+	if (growthiness > 0) this.age = this.age + (Date.now() - lastTime + 1)/1000*growthiness;
+
 	if (this.age < 60) {
 		var growthFactor = Math.log(this.age/12+1) / (this.level*1.1 + 1);
 	} else {
@@ -148,14 +149,14 @@ MaplePart.prototype.update = function(time, lastTime) {
 				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: 0.85, g: 1, b: 0 }, 2000);
 				var otherTween = new TWEEN.Tween(this.mesh.material.color).to({r: 1, g: 0.3984375, b: 0 }, 1000);
 				this.tween.delay(Math.random() * 1000);
-				
+
 				var self = this;
 				otherTween.onComplete(function(obj){
 					self.leafState = "fall";
 				});
-				
+
 				this.tween.chain(otherTween);
-				
+
 				this.tween.start();
 				this.tweenRunning = true;
 			}
@@ -167,22 +168,22 @@ MaplePart.prototype.update = function(time, lastTime) {
 			this.mesh.material.color.setHex(0x68ff03);
 			this.leafState = "grow"
 		}
-		
+
 		if(this.leafState === "fall") {
 			this.age = 0;
 		} else {
 			this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
 		}
-		
-		
+
+
 	} else {
 		this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
 
 		while (this.age > this.terminalAge && this.childParts.length < this.numChildren && this.level < 6) {
 			this.childParts.push(new MaplePart(this, undefined));
 		};
-		
-		
+
+
 		var self = this;
 		self.childParts.forEach(function(childPart) {
 			if (childPart.type === "leaf" && childPart.leafState === "fall") {
@@ -196,7 +197,7 @@ MaplePart.prototype.update = function(time, lastTime) {
 				childPart.group.position.y = growthFactor * heightFactor;
 				childPart.group.position.x = 0;
 				childPart.group.position.z = 0;
-				
+				// childPart.age = 0;
 			}
 			childPart.update(time, lastTime);
 		});
@@ -204,5 +205,5 @@ MaplePart.prototype.update = function(time, lastTime) {
 
 	this.group.updateMatrix();
 
-	
+
 };
