@@ -34,3 +34,36 @@ canvas {
 	margin-right: 20%;
 	height: 70px;
 }
+
+
+.slidecontainer {
+	z-index: 10;
+	position: absolute;
+	bottom: 50px;
+	width: 80%;
+	left: 10%;
+}
+
+.slider {
+	-webkit-appearance: none;
+	outline: none;
+	border: 0;
+	opacity: .3;
+	height: 3px;
+	cursor: pointer;
+	-webkit-transition: .3s;
+}
+
+.slider:hover {
+	opacity: .8;
+}
+
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background: white;
+	cursor: pointer;
+}
