@@ -10,7 +10,6 @@ function MaplePart(parentPart, type) {
 	this.widthFactor = 0.65;
 
 	this.type = type;
-	//console.log(type);
 	if (type === "trunk") {
 		this.level = 1;
 	} else {
@@ -59,7 +58,6 @@ function MaplePart(parentPart, type) {
 		this.numChildren = 0;
 		this.lengthFactor = .6;
 		this.widthFactor = 0.4;
-		// this.straight = false;
 		this.leafState = "grow";
 		this.tweenRunning = false;
 
@@ -98,14 +96,12 @@ function MaplePart(parentPart, type) {
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
 		this.budGrowth = 6;
 		this.numChildren = 5;
-		// this.straight = false;
 		this.minAngle = 90;
 		this.maxAngle = 90;
 		this.lengthFactor = Math.random()*.6 + .3;
 		this.widthFactor = 0.35;
 		this.type = "twig";
 
-		// this.childParts.push(new MaplePart(this, "leaf"));
 		this.childParts.push(new MaplePart(this, "leaf"));
 		this.childParts.push(new MaplePart(this, "leaf"));
 	};
@@ -117,33 +113,23 @@ function MaplePart(parentPart, type) {
 	};
 	this.group.add(this.mesh);
 
-	// if (type !== "leaf" && type !== "trunk") {
-	// 	this.childParts.push(new MaplePart(this, "leaf"));
-	// 	this.childParts.push(new MaplePart(this, "leaf"));
-	// };
 };
 
 MaplePart.prototype.update = function(time, lastTime) {
 
-
-	// if(time.currentSeason !== "FA" && time.currentSeason !== "WI") {
-	// 	this.growth = this.growth + (Date.now() - lastTime + 1)/1000;
-	// } else {
-	// 	this.growth = this.growth + (Date.now() - lastTime + 1)/10000;
-	// }
-	var growthiness = Math.sin(time.seasonRad) + .3;
-	if (growthiness > 0) this.growth = this.growth + (Date.now() - lastTime + 1)/1000*growthiness;
+	var timeDelta = time.delta/1000;
+	var growthiness = Math.sin(Math.PI/8 + time.seasonRad) + .3;
+	if (growthiness > 0) this.growth = this.growth + timeDelta*growthiness;
 
 	if (this.growth < 60) {
 		var growthFactor = Math.log(this.growth/12+1) / (this.level*1.1 + 1);
 	} else {
-		var growthFactor = Math.log(60/12+1) / (this.level*1.1 + 1);
+		growthFactor = Math.log(60/12+1) / (this.level*1.1 + 1);
 	}
 
 	var heightFactor = this.lengthFactor;
 	if (this.type === "leaf") {
 
-		// leaf color
 		if (time.currentSeason === "FA" && time.lastSeason === "SU") {
 			if (!this.tweenRunning) {
 				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: 0.85, g: 1, b: 0 }, 2000);
@@ -170,7 +156,7 @@ MaplePart.prototype.update = function(time, lastTime) {
 		}
 
 		if(this.leafState === "fall") {
-			this.growth = 0;
+			this.growth = 0.000001;
 		} else {
 			this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
 		}
@@ -188,7 +174,6 @@ MaplePart.prototype.update = function(time, lastTime) {
 		self.childParts.forEach(function(childPart) {
 			if (childPart.type === "leaf" && childPart.leafState === "fall") {
 				var vector = self.group.localToWorld( new THREE.Vector3( 0, -1, 0 ) );
-				//var vector = self.group.worldToLocal( new THREE.Vector3( 0, -1, 0 ) );
 				vector.normalize();
 				childPart.group.position.x += vector.x * 0.005;
 				childPart.group.position.y += vector.y * 0.005;
@@ -197,9 +182,8 @@ MaplePart.prototype.update = function(time, lastTime) {
 				childPart.group.position.y = growthFactor * heightFactor;
 				childPart.group.position.x = 0;
 				childPart.group.position.z = 0;
-				// childPart.growth = 0;
 			}
-			childPart.update(time, lastTime);
+			childPart.update(time);
 		});
 	}
 

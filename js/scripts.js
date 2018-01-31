@@ -3,6 +3,11 @@ function rotateAndTilt(x, y) {
 };
 
 function Time() {
+	
+	this.time = 0;
+	this.lastTime = 0;
+	this.delta = 0;
+	
 	var daysPerYear = 8;
 	this.summerDate = Math.PI / 4;
 	this.fallDate = Math.PI * 3 / 4;
@@ -16,11 +21,16 @@ function Time() {
 	this.seasonRad = 0;
 
 	this.update = function() {
-		this.dayRad = ((Date.now() / 3000) % 2) * Math.PI;
-		this.seasonRad = ((Date.now() / (3000 * daysPerYear)) % 2) * Math.PI;
+		
+		var now = Date.now();
+		this.dayRad = ((now / 3000) % 2) * Math.PI;
+		this.seasonRad = ((now / (3000 * daysPerYear)) % 2) * Math.PI;
 		this.lastSeason = this.currentSeason;
 		this.currentSeason = this.getSeason();
-		//console.log(this.currentSeason);
+		
+		this.lastTime = this.time;
+		this.time = now;
+		this.delta = this.time - this.lastTime;
 	}
 
 	this.getSeason = function() {
@@ -98,8 +108,6 @@ $(document).ready(function() {
 
 	var controls = new THREE.OrbitControls(camera);
 	controls.addEventListener('change', function() {renderer.render(scene, camera);});
-	
-	var lastTime = Date.now();
 
 	function animate() {
 		requestAnimationFrame(animate);
@@ -107,7 +115,7 @@ $(document).ready(function() {
 		time.update();
 		TWEEN.update();
 		soil.update(time)
-		maple.update(time, lastTime);
+		maple.update(time);
 		roots.update(time);
 		lighting.update(time);
 		renderer.render(scene, camera);
