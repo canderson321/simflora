@@ -24,22 +24,40 @@ function Lighting() {
 	// moonLight.add( new THREE.Mesh( moonGeometry, moonMaterial ));
 	// moonLight.position.set( 0, -10, 0 );
 
-	this.update = function(time) {
-		// if (sunClicked === true) {
-			// var radians = (Date.now() - this.timeStamp)/1000;
-			ambient.intensity = Math.sin(time.dayRad)/2 + 1;
-			sunLight.intensity = .5;//Math.sin(radians) + .5;
-			// moonLight.intensity = .5;//-Math.sin(radians) + .5;
-			sunLight.position.x = 10*Math.cos(time.dayRad) + 0;
-			sunLight.position.y = 10*Math.sin(time.dayRad) + 0;
+	//seasonal lights
+		var winterLight = new THREE.DirectionalLight( 0x6050af, .05, 100, 2);
+		winterLight.position.set(0, 10, 0);
 
-			// moonLight.position.x = -10*Math.cos(radians) + 0;
-			// moonLight.position.y = -10*Math.sin(radians) + 0;
-		// }
+		var summerLight = new THREE.DirectionalLight( 0xfffa00, .1, 100, 2 );
+		summerLight.position.set(0, 10, 0);
+
+		var fallLight = new THREE.DirectionalLight( 0xff93a5, .5, 100, 2);
+		fallLight.position.set(0, 10, 0);
+
+		var springLight = new THREE.DirectionalLight( 0x84ff88, .5, 100, 2);
+		springLight.position.set(0, 10, 0)
+
+	this.update = function(time) {
+		var radians = (Date.now() - this.timeStamp)/1000;
+		sunLight.intensity = .5;//Math.sin(radians) + .5;
+		// moonLight.intensity = .5;//-Math.sin(radians) + .5;
+		sunLight.position.x = 10*Math.cos(time.dayRad) + 0;
+		sunLight.position.y = 10*Math.sin(time.dayRad) + 0;
+		// moonLight.position.x = -10*Math.cos(radians) + 0;
+		// moonLight.position.y = -10*Math.sin(radians) + 0;
+		ambient.intensity = (Math.sin(time.dayRad) + 1)/2;
+		winterLight.intensity = (Math.sin(time.seasonRad-Math.PI/2) + Math.PI/8);
+		//fallLight.intensity = Math.cos((time.seasonRad+Math.PI)/2);
+		summerLight.intensity = (Math.cos(time.seasonRad) + Math.PI/8)/2;
+		//springLight.intensity = Math.sin((time.seasonRad-Math.PI)/2);
 	};
 
 	this.group = new THREE.Group();
 	this.group.add(ambient);
 	this.group.add(sunLight);
+	this.group.add(winterLight);
+	this.group.add(summerLight);
+	//this.group.add(fallLight);
+	//this.group.add(springLight);
 	// this.group.add(moonLight);
 };
