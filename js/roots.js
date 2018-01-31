@@ -11,7 +11,7 @@ function RootPart(parentPart) {
 	if (parentPart === undefined) {
 		this.level = 1;
 		this.terminalAge = 1;
-		this.numChildren = 12;
+		this.numChildren = 10;
 		this.minAngle = 10;
 		this.maxAngle = 80;
 
