@@ -12,12 +12,11 @@ function RootPart(parentPart) {
 	if (parentPart === undefined) {
 		this.level = 1;
 		this.terminalAge = 1;
-		this.numChildren = 10;
+		this.numChildren = 12;
 		this.minAngle = 10;
-		this.maxAngle = 83;
+		this.maxAngle = 80;
 
 		this.type = "base";
-		this.group.position.y = .38;
 	} else {
 		this.level = parentPart.level + 1;
 		parentPart.group.add(this.group);
@@ -33,9 +32,9 @@ function RootPart(parentPart) {
 			material = new THREE.MeshLambertMaterial( {color: 0xc4b99a} );
 			geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
 			this.numChildren = 2
-			this.minAngle = 5;
-			this.maxAngle = 30;
-			this.lengthFactor = 1.2;
+			this.minAngle = 0;
+			this.maxAngle = 35;
+			this.lengthFactor = 1.7 * Math.random();
 			this.widthFactor = 0.5;
 			this.type = "root";
 
@@ -47,7 +46,7 @@ function RootPart(parentPart) {
 			// this.straight = true;
 			this.minAngle = 10;
 			this.maxAngle = 30;
-			this.lengthFactor = 1;
+			this.lengthFactor = 1.5*Math.random();
 			this.widthFactor = 0.3;
 			this.type = "root";
 

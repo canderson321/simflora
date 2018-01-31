@@ -24,14 +24,14 @@ function Lighting() {
 	// moonLight.add( new THREE.Mesh( moonGeometry, moonMaterial ));
 	// moonLight.position.set( 0, -10, 0 );
 
-	this.update = function() {
+	this.update = function(time) {
 		// if (sunClicked === true) {
-			var radians = (Date.now() - this.timeStamp)/1000;
-			ambient.intensity = Math.sin(radians)/2 + 1;
+			// var radians = (Date.now() - this.timeStamp)/1000;
+			ambient.intensity = Math.sin(time.dayRad)/2 + 1;
 			sunLight.intensity = .5;//Math.sin(radians) + .5;
 			// moonLight.intensity = .5;//-Math.sin(radians) + .5;
-			sunLight.position.x = 10*Math.cos(radians) + 0;
-			sunLight.position.y = 10*Math.sin(radians) + 0;
+			sunLight.position.x = 10*Math.cos(time.dayRad) + 0;
+			sunLight.position.y = 10*Math.sin(time.dayRad) + 0;
 
 			// moonLight.position.x = -10*Math.cos(radians) + 0;
 			// moonLight.position.y = -10*Math.sin(radians) + 0;
