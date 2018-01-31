@@ -75,7 +75,8 @@ function Soil() {
 };
 
 Soil.prototype.update = function(time) {
-	this.snowGroup.position.y = -Math.sin(time.seasonRad)*.3;
+	var snowHeight = -Math.sin(time.seasonRad)*.3;
+	if (snowHeight > 0) this.snowGroup.position.y = -Math.sin(time.seasonRad)*.3;
 
 	if (time.currentSeason === "WI" && time.lastSeason === "FA") {
 		this.springTween.stop();
