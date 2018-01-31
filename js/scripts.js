@@ -7,10 +7,10 @@ function Time() {
 	this.update = function() {
 		this.dayRad = ((Date.now() / 1000) % 2) * Math.PI;
 		this.seasonRad = ((Date.now() / (1000 * daysPerSeason)) % 2) * Math.PI;
-		
-		console.log(this.seasonRad);
 	}
 }
+
+var scene;
 
 $(document).ready(function() {
 	var renderer = new THREE.WebGLRenderer();
@@ -21,7 +21,7 @@ $(document).ready(function() {
 	camera.position.set(0, 3, 25);
 	camera.lookAt(new THREE.Vector3(0, 5, 0));
 
-	var scene = new THREE.Scene();
+	scene = new THREE.Scene();
 
 	var lighting = new Lighting();
 	scene.add(lighting.group);
@@ -49,7 +49,7 @@ $(document).ready(function() {
 
 	function animate() {
 		requestAnimationFrame(animate);
-		scene.rotation.y += 0.002;
+		//scene.rotation.y += 0.002;
 		time.update();
 		maple.update(time);
 		lighting.update();
