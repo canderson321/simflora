@@ -3,7 +3,7 @@ function rotateAndTilt(x, y) {
 };
 
 function Time() {
-	var daysPerYear = 8;
+	var daysPerYear = 4;
 	
 	this.summerDate = Math.PI / 4;
 	this.fallDate = Math.PI * 3 / 4;
@@ -21,7 +21,7 @@ function Time() {
 		this.seasonRad = ((Date.now() / (3000 * daysPerYear)) % 2) * Math.PI;
 		this.lastSeason = this.currentSeason;
 		this.currentSeason = this.getSeason();
-		console.log(this.currentSeason);
+		//console.log(this.currentSeason);
 	}
 	
 	this.getSeason = function() {
