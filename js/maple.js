@@ -8,7 +8,7 @@ function MaplePart(parentPart, type) {
 	this.group = new THREE.Group();
 	this.mesh;
 
-	this.straight = true;
+	// this.straight = true;
 	this.lengthFactor = 1;
 	this.widthFactor = 0.65;
 
@@ -72,7 +72,7 @@ console.log(type);
 		this.numChildren = 0;
 		this.lengthFactor = 1;
 		this.widthFactor = 0.65;
-		this.straight = false;
+		// this.straight = false;
 		this.leafState = "grow";
 
 	} else if (this.level === 1) {
@@ -110,7 +110,7 @@ console.log(type);
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
 		this.terminalAge = 6;
 		this.numChildren = 5;
-		this.straight = false;
+		// this.straight = false;
 		this.minAngle = 90;
 		this.maxAngle = 90;
 		this.lengthFactor = Math.random()*.6 + .3;
@@ -254,9 +254,9 @@ console.log(type);
 		// geometry.translate(0, -0.5, 0);
 
 		this.numChildren = 0;
-		this.lengthFactor = 1;
-		this.widthFactor = 0.65;
-		this.straight = false;
+		this.lengthFactor = .9;
+		this.widthFactor = 0.6;
+		// this.straight = false;
 		this.leafState = "grow";
 
 	} else if (this.level === 1) {
@@ -294,7 +294,7 @@ console.log(type);
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
 		this.terminalAge = 6;
 		this.numChildren = 5;
-		this.straight = false;
+		// this.straight = false;
 		this.minAngle = 90;
 		this.maxAngle = 90;
 		this.lengthFactor = Math.random()*.6 + .3;

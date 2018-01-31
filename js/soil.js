@@ -49,5 +49,5 @@ function Soil() {
 		this.group.add(stone);
 	};
 
-	this.group.scale.set(.1, .1, .1)
+	this.group.scale.set(.09, .09, .09)
 };
