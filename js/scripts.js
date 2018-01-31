@@ -3,7 +3,7 @@ function rotateAndTilt(x, y) {
 };
 
 function Time() {
-	var daysPerYear = 4;
+	var daysPerYear = 8;
 	this.summerDate = Math.PI / 4;
 	this.fallDate = Math.PI * 3 / 4;
 	this.winterDate = Math.PI * 5 / 4;
@@ -43,8 +43,8 @@ function Stars() {
 		emissiveIntensity: 1,
 		color: 0x000000
 	});
-	for (var i = 0; i < 2000; i++) {
-		var radius = .04//Math.random()*.005 + .005;
+	for (var i = 0; i < 1000; i++) {
+		var radius = .05//Math.random()*.005 + .005;
 		var geometry = new THREE.SphereGeometry(radius, 2, 2 );
 		var distance = 7 + Math.random()*15;
 		geometry.translate(distance, distance, distance);
@@ -98,6 +98,8 @@ $(document).ready(function() {
 
 	var controls = new THREE.OrbitControls(camera);
 	controls.addEventListener('change', function() {renderer.render(scene, camera);});
+	
+	var lastTime = Date.now();
 
 	function animate() {
 		requestAnimationFrame(animate);
@@ -105,10 +107,11 @@ $(document).ready(function() {
 		time.update();
 		TWEEN.update();
 		soil.update(time)
-		maple.update(time);
+		maple.update(time, lastTime);
 		roots.update(time);
 		lighting.update(time);
 		renderer.render(scene, camera);
+		lastTime = Date.now();
 	};
 	animate();
 });

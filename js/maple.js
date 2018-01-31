@@ -1,6 +1,7 @@
 function MaplePart(parentPart, type) {
 	this.childParts = [];
 	this.timestamp = Date.now();
+	this.age = 0.00001;
 	this.group = new THREE.Group();
 	this.mesh;
 
@@ -122,10 +123,18 @@ function MaplePart(parentPart, type) {
 	// };
 };
 
-MaplePart.prototype.update = function(time) {
-	var age = (Date.now() - this.timestamp + 1)/1000;
-	if (age < 60) {
-		var growthFactor = Math.log(age/12+1) / (this.level*1.1 + 1);
+MaplePart.prototype.update = function(time, lastTime) {
+	
+	
+	if(time.currentSeason !== "FA" && time.currentSeason !== "WI") {
+		this.age = this.age + (Date.now() - lastTime + 1)/1000;
+	} else {
+		this.age = this.age + (Date.now() - lastTime + 1)/10000;
+	}
+	
+	
+	if (this.age < 60) {
+		var growthFactor = Math.log(this.age/12+1) / (this.level*1.1 + 1);
 	} else {
 		var growthFactor = Math.log(60/12+1) / (this.level*1.1 + 1);
 	}
@@ -136,8 +145,17 @@ MaplePart.prototype.update = function(time) {
 		// leaf color
 		if (time.currentSeason === "FA" && time.lastSeason === "SU") {
 			if (!this.tweenRunning) {
-				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: Math.random() / 4 + 0.75, g: 1, b: 0 }, 1000);
-				this.tween.chain(new TWEEN.Tween(this.mesh.material.color).to({r: Math.random() / 2 + 0.5, g: Math.random() / 2, b: 0 }, 1000));
+				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: 0.85, g: 1, b: 0 }, 2000);
+				var otherTween = new TWEEN.Tween(this.mesh.material.color).to({r: 1, g: 0.3984375, b: 0 }, 1000);
+				this.tween.delay(Math.random() * 1000);
+				
+				var self = this;
+				otherTween.onComplete(function(obj){
+					self.leafState = "fall";
+				});
+				
+				this.tween.chain(otherTween);
+				
 				this.tween.start();
 				this.tweenRunning = true;
 			}
@@ -145,47 +163,46 @@ MaplePart.prototype.update = function(time) {
 			this.tweenRunning = false;
 		}
 
-		if (time.seasonRad > Math.PI && time.currentSeason !== "SP" && this.leafState === "grow" && Math.random() < 0.05) {
-			this.leafState = "fall";
-		} else if (time.currentSeason === "SP" && time.lastSeason === "WI" && this.leafState === "fall" ) {
+		if (time.currentSeason === "SP" && time.lastSeason === "WI" && this.leafState === "fall" ) {
 			this.mesh.material.color.setHex(0x68ff03);
 			this.leafState = "grow"
-		} else if (time.currentSeason === "SP" && time.lastSeason === "WI") {
-			
 		}
 		
 		if(this.leafState === "fall") {
-			this.timestamp = Date.now();
+			this.age = 0;
+		} else {
+			this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
 		}
+		
+		
+	} else {
+		this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
+
+		while (this.age > this.terminalAge && this.childParts.length < this.numChildren && this.level < 6) {
+			this.childParts.push(new MaplePart(this, undefined));
+		};
+		
+		
+		var self = this;
+		self.childParts.forEach(function(childPart) {
+			if (childPart.type === "leaf" && childPart.leafState === "fall") {
+				var vector = self.group.localToWorld( new THREE.Vector3( 0, -1, 0 ) );
+				//var vector = self.group.worldToLocal( new THREE.Vector3( 0, -1, 0 ) );
+				vector.normalize();
+				childPart.group.position.x += vector.x * 0.005;
+				childPart.group.position.y += vector.y * 0.005;
+				childPart.group.position.z += vector.z * 0.005;
+			} else {
+				childPart.group.position.y = growthFactor * heightFactor;
+				childPart.group.position.x = 0;
+				childPart.group.position.z = 0;
+				
+			}
+			childPart.update(time, lastTime);
+		});
 	}
-
-
-	this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
-
-
-	// if (this.straight) {
-	// 	this.childParts.push(new MaplePart(this, undefined));
-	// 	this.straight = false;
-	// };
-
-	while (age > this.terminalAge && this.childParts.length < this.numChildren && this.level < 6) {
-		this.childParts.push(new MaplePart(this, undefined));
-	};
 
 	this.group.updateMatrix();
 
-	var self = this;
-	self.childParts.forEach(function(childPart) {
-		if (childPart.type === "leaf") {
-			if (childPart.leafState === "grow") {
-				childPart.group.position.y = growthFactor * heightFactor;
-			} else {
-
-				childPart.group.position += childPart.group.localToWorld( new THREE.Vector3( 0, -1, 0 ) );
-			}
-		} else {
-			childPart.group.position.y = growthFactor * heightFactor;
-		}
-		childPart.update(time);
-	});
+	
 };
