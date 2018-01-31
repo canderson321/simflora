@@ -1,8 +1,3 @@
-function rotateAndTilt(x, y) {
-	return new THREE.Euler(x * Math.PI / 180, y * Math.PI / 180, 0, 'YXZ');
-};
-
-
 function MaplePart(parentPart, type) {
 	this.childParts = [];
 	this.timestamp = Date.now();
@@ -57,46 +52,46 @@ function MaplePart(parentPart, type) {
 		geometry.faces.push( new THREE.Face3( 1, 2, 3 ) );
 		geometry.faces.push( new THREE.Face3( 6, 8, 7 ) );
 
-		geometry.scale(1.0 / 12.0, 1.0 / 18.0, 1.0 / 12.0);
+		geometry.scale(1 / 12.0, 1 / 18.0, 1 / 12.0);
 		geometry.translate(0, -0.6, 0);
 
 		this.numChildren = 0;
-		this.lengthFactor = .9;
-		this.widthFactor = 0.6;
+		this.lengthFactor = .6;
+		this.widthFactor = 0.4;
 		// this.straight = false;
 		this.leafState = "grow";
 		this.tweenRunning = false;
 
 	} else if (this.level === 1) {
 		material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
-		geometry = new THREE.CylinderGeometry(.05, .1, 1, 5, 1, true );
+		geometry = new THREE.CylinderGeometry(.07, .1, 1, 5, 1, true );
 		this.terminalAge = 7;
 		this.numChildren = 6;
-		this.minAngle = 25;
+		this.minAngle = 20;
 		this.maxAngle = 60;
-		this.lengthFactor = .7;
-		this.widthFactor = .5;
+		this.lengthFactor = .6;
+		this.widthFactor = .35;
 		this.childParts.push(new MaplePart(this, undefined));
 		this.childParts.push(new MaplePart(this, "leaf"));
 		this.childParts.push(new MaplePart(this, "leaf"));
 		this.group.position.y = .1;
 
-	} else if (this.level < 5) {
+	} else if (this.level < 6) {
 
 		material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
 		this.terminalAge = 7;
 		this.numChildren = 5;
-		this.minAngle = 25;
-		this.maxAngle = 65;
+		this.minAngle = 20;
+		this.maxAngle = 60;
 		this.lengthFactor = Math.random()*.6 + .3;
-		this.widthFactor = .5;
+		this.widthFactor = .35;
 
 		this.type = "branch";
 
 		this.childParts.push(new MaplePart(this, "leaf"));
 		this.childParts.push(new MaplePart(this, "leaf"));
-	} else if (this.level === 5) {
+	} else if (this.level === 6) {
 
 		material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
@@ -106,7 +101,7 @@ function MaplePart(parentPart, type) {
 		this.minAngle = 90;
 		this.maxAngle = 90;
 		this.lengthFactor = Math.random()*.6 + .3;
-		this.widthFactor = 0.5;
+		this.widthFactor = 0.35;
 		this.type = "twig";
 
 		// this.childParts.push(new MaplePart(this, "leaf"));
@@ -130,9 +125,9 @@ function MaplePart(parentPart, type) {
 MaplePart.prototype.update = function(time) {
 	var age = (Date.now() - this.timestamp + 1)/1000;
 	if (age < 60) {
-		var growthFactor = Math.log(age/12+1) / (this.level + 1);
+		var growthFactor = Math.log(age/12+1) / (this.level*1.1 + 1);
 	} else {
-		var growthFactor = Math.log(60/12+1) / (this.level + 1);
+		var growthFactor = Math.log(60/12+1) / (this.level*1.1 + 1);
 	}
 
 	var heightFactor = this.lengthFactor;
@@ -141,7 +136,7 @@ MaplePart.prototype.update = function(time) {
 		// leaf color
 		if (time.currentSeason === "FA" && time.lastSeason === "SU") {
 			if (!this.tweenRunning) {
-				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: Math.random() / 2 + 0.25, g: 1, b: 0 }, 1000);
+				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: Math.random() / 4 + 0.75, g: 1, b: 0 }, 1000);
 				this.tween.chain(new TWEEN.Tween(this.mesh.material.color).to({r: Math.random() / 2 + 0.5, g: Math.random() / 2, b: 0 }, 1000));
 				this.tween.start();
 				this.tweenRunning = true;
@@ -149,9 +144,8 @@ MaplePart.prototype.update = function(time) {
 		} else {
 			this.tweenRunning = false;
 		}
-		
-		//leaf fall
-		if (time.seasonRad > Math.PI && time.seasonRad < Math.PI*7/4 && this.leafState === "grow" && Math.random() < 0.05) {
+
+		if (time.seasonRad > Math.PI && time.currentSeason !== "SP" && this.leafState === "grow" && Math.random() < 0.05) {
 			this.leafState = "fall";
 		} else if (time.currentSeason === "SP" && time.lastSeason === "WI" && this.leafState === "fall" ) {
 			this.mesh.material.color.setHex(0x68ff03);
@@ -174,10 +168,10 @@ MaplePart.prototype.update = function(time) {
 	// 	this.straight = false;
 	// };
 
-	while (age > this.terminalAge && this.childParts.length < this.numChildren && this.level < 5) {
+	while (age > this.terminalAge && this.childParts.length < this.numChildren && this.level < 6) {
 		this.childParts.push(new MaplePart(this, undefined));
 	};
-	
+
 	this.group.updateMatrix();
 
 	var self = this;

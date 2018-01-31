@@ -6,3 +6,31 @@ canvas {
 	height: 100%;
 	width: 100%;
 }
+
+#welcome {
+	width: 100%;
+	height: auto;
+	background-color: rgba(20, 20, 20, .8);
+	top: 25%;
+	position: fixed;
+	z-index:10;
+	padding: 40px;
+}
+
+#welcomeContent {
+	width: 60%;
+	margin-left: 20%;
+	margin-top: auto;
+	color: whitesmoke;
+	text-align: center;
+
+}
+
+#hideMessage {
+	padding: auto;
+	border: 1px solid whitesmoke;
+	margin-top: 30px;
+	margin-left: 20%;
+	margin-right: 20%;
+	height: 70px;
+}

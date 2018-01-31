@@ -38,7 +38,7 @@ function Soil() {
 	var material = new THREE.MeshLambertMaterial( {color: 0x656b59} );
 	for (var i = 0; i < 8; i++) {
 		var radius = Math.random() + .5;
-		var geometry = new THREE.SphereGeometry(radius, 32, 32 );
+		var geometry = new THREE.SphereGeometry(radius, 8, 8 );
 		var x = 2 + Math.random() * 6.5;
 		geometry.translate(x, 0, 0);
 		var stone = new THREE.Mesh( geometry, material );
@@ -50,9 +50,9 @@ function Soil() {
 	};
 
 	this.group.scale.set(.09, .09, .09)
-	
-	
-	//, , 
+
+
+	//, ,
 	this.winterTween = new TWEEN.Tween(this.top.material.color).to({r: 1, g: 1, b: 1 }, 500);
 	this.springTween = new TWEEN.Tween(this.top.material.color).to({r: 0.314, g: 0.522, b: 0.322 }, 1000);
 };
