@@ -3,8 +3,7 @@ function rotateAndTilt(x, y) {
 };
 
 function Time() {
-	var daysPerYear = 8;
-
+	var daysPerYear = 4;
 	this.summerDate = Math.PI / 4;
 	this.fallDate = Math.PI * 3 / 4;
 	this.winterDate = Math.PI * 5 / 4;
@@ -21,7 +20,7 @@ function Time() {
 		this.seasonRad = ((Date.now() / (3000 * daysPerYear)) % 2) * Math.PI;
 		this.lastSeason = this.currentSeason;
 		this.currentSeason = this.getSeason();
-		console.log(this.currentSeason);
+		//console.log(this.currentSeason);
 	}
 
 	this.getSeason = function() {
@@ -44,8 +43,8 @@ function Stars() {
 		emissiveIntensity: 1,
 		color: 0x000000
 	});
-	for (var i = 0; i < 5000; i++) {
-		var radius = .02//Math.random()*.005 + .005;
+	for (var i = 0; i < 2000; i++) {
+		var radius = .04//Math.random()*.005 + .005;
 		var geometry = new THREE.SphereGeometry(radius, 2, 2 );
 		var distance = 7 + Math.random()*15;
 		geometry.translate(distance, distance, distance);

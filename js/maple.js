@@ -135,20 +135,27 @@ MaplePart.prototype.update = function(time) {
 
 		// leaf color
 		if (time.currentSeason === "FA" && time.lastSeason === "SU") {
-			if (!this.tweenRunning)
-				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: Math.random(), g: Math.random(), b: 0 }, 3000).start();
-			this.tweenRunning = true;
+			if (!this.tweenRunning) {
+				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: Math.random() / 4 + 0.75, g: 1, b: 0 }, 1000);
+				this.tween.chain(new TWEEN.Tween(this.mesh.material.color).to({r: Math.random() / 2 + 0.5, g: Math.random() / 2, b: 0 }, 1000));
+				this.tween.start();
+				this.tweenRunning = true;
+			}
 		} else {
 			this.tweenRunning = false;
-			this.mesh.material.color.setHex(0x68ff03);
 		}
-
 
 		if (time.seasonRad > Math.PI && time.currentSeason !== "SP" && this.leafState === "grow" && Math.random() < 0.05) {
 			this.leafState = "fall";
-		} else if (time.seasonRad < 7 * Math.PI / 4 && this.leafState === "fall") {
-			this.timestamp = Date.now();
+		} else if (time.currentSeason === "SP" && time.lastSeason === "WI" && this.leafState === "fall" ) {
+			this.mesh.material.color.setHex(0x68ff03);
 			this.leafState = "grow"
+		} else if (time.currentSeason === "SP" && time.lastSeason === "WI") {
+			
+		}
+		
+		if(this.leafState === "fall") {
+			this.timestamp = Date.now();
 		}
 	}
 
