@@ -37,9 +37,9 @@ function Soil() {
 
 	var material = new THREE.MeshLambertMaterial( {color: 0x656b59} );
 	for (var i = 0; i < 8; i++) {
-		var radius = Math.random()*1.3 + .2;
+		var radius = Math.random() + .5;
 		var geometry = new THREE.SphereGeometry(radius, 32, 32 );
-		var x = 1 + Math.random() * 7.5;
+		var x = 2 + Math.random() * 6.5;
 		geometry.translate(x, 0, 0);
 		var stone = new THREE.Mesh( geometry, material );
 		stone.position.y = Math.cos(Math.PI/20*x);
@@ -49,5 +49,5 @@ function Soil() {
 		this.group.add(stone);
 	};
 
-	this.group.scale.set(.35, .35, .35)
+	this.group.scale.set(.09, .09, .09)
 };

@@ -3,7 +3,7 @@ function Lighting() {
 
 	var ambient = new THREE.AmbientLight(0x606060);
 
-	var sunGeometry = new THREE.SphereGeometry( .4, 16, 16 );
+	var sunGeometry = new THREE.SphereGeometry( .08, 16, 16 );
 	var sunLight = new THREE.DirectionalLight( 0xffffee, 1, 100, 2 );
 	var sunMaterial = new THREE.MeshStandardMaterial( {
 		emissive: 0xffffee,
@@ -25,30 +25,30 @@ function Lighting() {
 	// moonLight.position.set( 0, -10, 0 );
 
 	//seasonal lights
-		var winterLight = new THREE.DirectionalLight( 0x6050af, .05, 100, 2);
-		winterLight.position.set(0, 10, 0);
+		var winterLight = new THREE.AmbientLight( 0x998acc, .05, 100, 2);
+		// winterLight.position.set(0, 10, 0);
 
-		var summerLight = new THREE.DirectionalLight( 0xfffa00, .1, 100, 2 );
-		summerLight.position.set(0, 10, 0);
+		var summerLight = new THREE.AmbientLight( 0xfffa00, .1, 100, 2 );
+		// summerLight.position.set(0, 10, 0);
 
-		var fallLight = new THREE.DirectionalLight( 0xff93a5, .5, 100, 2);
-		fallLight.position.set(0, 10, 0);
+		// var fallLight = new THREE.AmbientLight( 0xff93a5, .5, 100, 2);
+		// fallLight.position.set(0, 10, 0);
 
-		var springLight = new THREE.DirectionalLight( 0x84ff88, .5, 100, 2);
-		springLight.position.set(0, 10, 0)
+		// var springLight = new THREE.AmbientLight( 0x84ff88, .5, 100, 2);
+		// springLight.position.set(0, 10, 0)
 
 	this.update = function(time) {
 		var radians = (Date.now() - this.timeStamp)/1000;
-		sunLight.intensity = .5;//Math.sin(radians) + .5;
+		sunLight.intensity = 1.5;//Math.sin(radians) + .5;
 		// moonLight.intensity = .5;//-Math.sin(radians) + .5;
-		sunLight.position.x = 10*Math.cos(time.dayRad) + 0;
-		sunLight.position.y = 10*Math.sin(time.dayRad) + 0;
+		sunLight.position.x = 1.8*Math.cos(time.dayRad) + 0;
+		sunLight.position.y = 1.8*Math.sin(time.dayRad) + 0;
 		// moonLight.position.x = -10*Math.cos(radians) + 0;
 		// moonLight.position.y = -10*Math.sin(radians) + 0;
-		ambient.intensity = (Math.sin(time.dayRad) + 1)/2;
-		winterLight.intensity = (Math.sin(time.seasonRad-Math.PI/2) + Math.PI/8);
+		ambient.intensity = Math.abs(Math.cos(time.dayRad))/3 + 1.5;
+		winterLight.intensity = -Math.sin(time.seasonRad)/3;
 		//fallLight.intensity = Math.cos((time.seasonRad+Math.PI)/2);
-		summerLight.intensity = (Math.cos(time.seasonRad) + Math.PI/8)/2;
+		summerLight.intensity = Math.sin(time.seasonRad)/3;// + Math.PI/8)/2;
 		//springLight.intensity = Math.sin((time.seasonRad-Math.PI)/2);
 	};
 

@@ -4,7 +4,6 @@ function RootPart(parentPart) {
 	this.group = new THREE.Group();
 	this.mesh;
 
-	this.terminalAge = 2;
 	this.straight = true;
 
 	this.type = "";
@@ -12,7 +11,7 @@ function RootPart(parentPart) {
 	if (parentPart === undefined) {
 		this.level = 1;
 		this.terminalAge = 1;
-		this.numChildren = 12;
+		this.numChildren = 10;
 		this.minAngle = 10;
 		this.maxAngle = 80;
 
@@ -31,10 +30,11 @@ function RootPart(parentPart) {
 
 			material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 			geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
+			this.terminalAge = 7;
 			this.numChildren = 2
 			this.minAngle = 0;
 			this.maxAngle = 35;
-			this.lengthFactor = 1.6 * Math.random();
+			this.lengthFactor = 1.3 * Math.random();
 			this.widthFactor = 0.5;
 			this.type = "root";
 
@@ -42,12 +42,13 @@ function RootPart(parentPart) {
 
 			material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 			geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
+			this.terminalAge = 7;
 			this.numChildren = 1;
 			// this.straight = true;
 			this.minAngle = 10;
 			this.maxAngle = 30;
-			this.lengthFactor = 1.6*Math.random();
-			this.widthFactor = 0.3;
+			this.lengthFactor = 1.8*Math.random();
+			this.widthFactor = 0.5;
 			this.type = "root";
 
 		}// else {
@@ -88,7 +89,6 @@ function RootPart(parentPart) {
 
 RootPart.prototype.update = function(time) {
 	var age = (Date.now() - this.timestamp + 1)/1000;
-	var growthFactor = Math.log(age / this.terminalAge + 1) / this.level;
 
 	var heightFactor = this.lengthFactor;
 	// if (this.type === "leaf") {
@@ -101,8 +101,14 @@ RootPart.prototype.update = function(time) {
 	// }
 
 
-	if (this.level > 1) this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
-
+	if (this.level > 1) {
+		if (age < 60) {
+			var growthFactor = Math.log(age/12+1) / (this.level + 1);
+		} else {
+			var growthFactor = Math.log(60/12+1) / (this.level + 1);
+		};
+		this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
+	};
 
 	// if (this.straight) {
 	// 	this.childParts.push(new RootPart(this));
