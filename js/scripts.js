@@ -13,9 +13,11 @@ function Time() {
 	}
 }
 
+var growthStart = false;
+
 $(document).ready(function() {
 	document.getElementById('hideMessage').addEventListener( 'click', function(event) {
-
+		growthStart = true;
 		document.getElementById('welcome').style.display = 'none';
 	})
 
