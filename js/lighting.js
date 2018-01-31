@@ -13,6 +13,7 @@ function Lighting() {
 	sunLight.add( new THREE.Mesh( sunGeometry, sunMaterial ));
 	sunLight.position.set( 0, 10, 0 );
 	sunLight.castShadow = true;
+	sunLight.shadowDarkness = 0.5;
 	sunLight.intensity = 1.2;//Math.sin(radians) + .5;
 
 	// var moonGeometry = new THREE.SphereGeometry( .2 )

@@ -72,6 +72,8 @@ function Soil() {
 	//, ,
 	this.winterTween = new TWEEN.Tween(this.top.material.color).to({r: 1, g: 1, b: 1 }, 500);
 	this.springTween = new TWEEN.Tween(this.top.material.color).to({r: 0.314, g: 0.522, b: 0.322 }, 1000);
+	this.top.castShadow = true;
+	this.top.receiveShadow = true;
 };
 
 Soil.prototype.update = function(time) {

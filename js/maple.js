@@ -116,11 +116,8 @@ function MaplePart(parentPart, type) {
 		this.mesh.add(stem);
 	};
 	this.group.add(this.mesh);
-
-	// if (type !== "leaf" && type !== "trunk") {
-	// 	this.childParts.push(new MaplePart(this, "leaf"));
-	// 	this.childParts.push(new MaplePart(this, "leaf"));
-	// };
+	this.mesh.castShadow = true;
+	this.mesh.receiveShadow = false;
 };
 
 MaplePart.prototype.update = function(time) {
