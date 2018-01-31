@@ -1,8 +1,3 @@
-function rotateAndTilt(x, y) {
-	return new THREE.Euler(x * Math.PI / 180, y * Math.PI / 180, 0, 'YXZ');
-};
-
-
 function MaplePart(parentPart, type) {
 	this.childParts = [];
 	this.timestamp = Date.now();
@@ -75,7 +70,7 @@ function MaplePart(parentPart, type) {
 		this.minAngle = 20;
 		this.maxAngle = 60;
 		this.lengthFactor = .6;
-		this.widthFactor = .4;
+		this.widthFactor = .35;
 		this.childParts.push(new MaplePart(this, undefined));
 		this.childParts.push(new MaplePart(this, "leaf"));
 		this.childParts.push(new MaplePart(this, "leaf"));
@@ -90,7 +85,7 @@ function MaplePart(parentPart, type) {
 		this.minAngle = 20;
 		this.maxAngle = 60;
 		this.lengthFactor = Math.random()*.6 + .3;
-		this.widthFactor = .4;
+		this.widthFactor = .35;
 
 		this.type = "branch";
 
@@ -106,7 +101,7 @@ function MaplePart(parentPart, type) {
 		this.minAngle = 90;
 		this.maxAngle = 90;
 		this.lengthFactor = Math.random()*.6 + .3;
-		this.widthFactor = 0.4;
+		this.widthFactor = 0.35;
 		this.type = "twig";
 
 		// this.childParts.push(new MaplePart(this, "leaf"));
@@ -130,9 +125,9 @@ function MaplePart(parentPart, type) {
 MaplePart.prototype.update = function(time) {
 	var age = (Date.now() - this.timestamp + 1)/1000;
 	if (age < 60) {
-		var growthFactor = Math.log(age/12+1) / (this.level + 1);
+		var growthFactor = Math.log(age/12+1) / (this.level*1.1 + 1);
 	} else {
-		var growthFactor = Math.log(60/12+1) / (this.level + 1);
+		var growthFactor = Math.log(60/12+1) / (this.level*1.1 + 1);
 	}
 
 	var heightFactor = this.lengthFactor;

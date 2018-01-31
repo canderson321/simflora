@@ -4,15 +4,15 @@ function rotateAndTilt(x, y) {
 
 function Time() {
 	var daysPerYear = 8;
-	
+
 	this.summerDate = Math.PI / 4;
 	this.fallDate = Math.PI * 3 / 4;
 	this.winterDate = Math.PI * 5 / 4;
 	this.springDate = Math.PI * 7 / 4;
-	
+
 	this.currentSeason = "";
 	this.lastSeason = ""
-	
+
 	this.dayRad = 0;
 	this.seasonRad = 0;
 
@@ -23,7 +23,7 @@ function Time() {
 		this.currentSeason = this.getSeason();
 		console.log(this.currentSeason);
 	}
-	
+
 	this.getSeason = function() {
 		if (this.seasonRad > this.summerDate && this.seasonRad <= this.fallDate)
 			return "SU";
@@ -37,6 +37,25 @@ function Time() {
 	this.update();
 }
 
+function Stars() {
+	this.group = new THREE.Group();
+	var material = new THREE.MeshStandardMaterial( {
+		emissive: 0xffffee,
+		emissiveIntensity: 1,
+		color: 0x000000
+	});
+	for (var i = 0; i < 5000; i++) {
+		var radius = .02//Math.random()*.005 + .005;
+		var geometry = new THREE.SphereGeometry(radius, 2, 2 );
+		var distance = 7 + Math.random()*15;
+		geometry.translate(distance, distance, distance);
+		var star = new THREE.Mesh( geometry, material );
+		// star.position.y = distance;
+		star.quaternion.setFromEuler(rotateAndTilt(Math.random() * 360, Math.random() * 360));
+		this.group.add(star);
+
+	};
+}
 var growthStart = false;
 
 $(document).ready(function() {
@@ -59,6 +78,9 @@ $(document).ready(function() {
 	var lighting = new Lighting();
 	scene.add(lighting.group);
 
+	var stars = new Stars();
+	scene.add(stars.group);
+
 	var maple = new MaplePart(undefined, "trunk");
 	scene.add(maple.group);
 
@@ -80,7 +102,7 @@ $(document).ready(function() {
 
 	function animate() {
 		requestAnimationFrame(animate);
-		scene.rotation.y = time.seasonRad;
+		scene.rotation.y += .001;
 		time.update();
 		TWEEN.update();
 		soil.update(time)

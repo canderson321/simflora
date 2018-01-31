@@ -33,7 +33,7 @@ function RootPart(parentPart) {
 			this.minAngle = 0;
 			this.maxAngle = 30;
 			this.lengthFactor = 1.2 * Math.random();
-			this.widthFactor = 0.45;
+			this.widthFactor = 0.4;
 			this.type = "root";
 
 		} else {
@@ -45,7 +45,7 @@ function RootPart(parentPart) {
 			this.minAngle = 10;
 			this.maxAngle = 30;
 			this.lengthFactor = 1.3*Math.random() + .1;
-			this.widthFactor = 0.45;
+			this.widthFactor = 0.4;
 			this.type = "rootlet";
 
 		}
@@ -62,9 +62,9 @@ RootPart.prototype.update = function(time) {
 
 	if (this.level > 1) {
 		if (age < 40) {
-			var growthFactor = Math.log(age/12+1) / (this.level + 1);
+			var growthFactor = Math.log(age/12+1) / (this.level*1.1 + 1);
 		} else {
-			var growthFactor = Math.log(40/12+1) / (this.level + 1);
+			var growthFactor = Math.log(40/12+1) / (this.level*1.1 + 1);
 		};
 		this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
 	};
