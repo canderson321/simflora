@@ -57,8 +57,8 @@ function MaplePart(parentPart, type) {
 		geometry.translate(0, -0.6, 0);
 
 		this.numChildren = 0;
-		this.lengthFactor = .6;
-		this.widthFactor = 0.4;
+		this.lengthFactor = .9;
+		this.widthFactor = 0.6;
 		// this.straight = false;
 		this.leafState = "grow";
 		this.tweenRunning = false;
@@ -123,20 +123,20 @@ function MaplePart(parentPart, type) {
 	// };
 };
 
-MaplePart.prototype.update = function(time, lastTime) {
+MaplePart.prototype.update = function(time) {
 	
-	
+	var timeDelta = time.delta/1000;
 	if(time.currentSeason !== "FA" && time.currentSeason !== "WI") {
-		this.age = this.age + (Date.now() - lastTime + 1)/1000;
+		this.age = this.age + timeDelta;
 	} else {
-		this.age = this.age + (Date.now() - lastTime + 1)/10000;
+		this.age = this.age + timeDelta / 10.0;
 	}
 	
-	
+	var growthFactor = 0;
 	if (this.age < 60) {
-		var growthFactor = Math.log(this.age/12+1) / (this.level*1.1 + 1);
+		growthFactor = Math.log(this.age/12+1) / (this.level*1.1 + 1);
 	} else {
-		var growthFactor = Math.log(60/12+1) / (this.level*1.1 + 1);
+		growthFactor = Math.log(60/12+1) / (this.level*1.1 + 1);
 	}
 
 	var heightFactor = this.lengthFactor;
@@ -169,7 +169,7 @@ MaplePart.prototype.update = function(time, lastTime) {
 		}
 		
 		if(this.leafState === "fall") {
-			this.age = 0;
+			this.age = 0.00000001;
 		} else {
 			this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
 		}
@@ -198,7 +198,7 @@ MaplePart.prototype.update = function(time, lastTime) {
 				childPart.group.position.z = 0;
 				
 			}
-			childPart.update(time, lastTime);
+			childPart.update(time);
 		});
 	}
 
