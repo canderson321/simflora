@@ -10,7 +10,7 @@ function Soil() {
 
 	var geometry = new THREE.LatheGeometry( topPoints );
 	var material = new THREE.MeshLambertMaterial( { color: 0x508552 } );
-	var top = new THREE.Mesh( geometry, material );
+	this.top = new THREE.Mesh( geometry, material );
 
 	var geometry = new THREE.LatheGeometry( bottomPoints );
 	var material = new THREE.MeshLambertMaterial( { color: 0x917054 } );
@@ -20,7 +20,7 @@ function Soil() {
 
 
 	this.group = new THREE.Group();
-	this.group.add(top);
+	this.group.add(this.top);
 	this.group.add(bottom);
 
 	for (var i = 0; i < 90; i++) {
@@ -50,4 +50,19 @@ function Soil() {
 	};
 
 	this.group.scale.set(.09, .09, .09)
+	
+	
+	//, , 
+	this.winterTween = new TWEEN.Tween(this.top.material.color).to({r: 1, g: 1, b: 1 }, 500);
+	this.springTween = new TWEEN.Tween(this.top.material.color).to({r: 0.314, g: 0.522, b: 0.322 }, 1000);
 };
+
+Soil.prototype.update = function(time) {
+	if (time.currentSeason === "WI" && time.lastSeason === "FA") {
+		this.springTween.stop();
+		this.winterTween.start();
+	} else if (time.currentSeason === "SP" && time.lastSeason === "WI") {
+		this.winterTween.stop();
+		this.springTween.start();
+	}
+}

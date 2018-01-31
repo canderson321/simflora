@@ -3,14 +3,38 @@ function rotateAndTilt(x, y) {
 };
 
 function Time() {
-	var daysPerYear = 4;
+	var daysPerYear = 8;
+	
+	this.summerDate = Math.PI / 4;
+	this.fallDate = Math.PI * 3 / 4;
+	this.winterDate = Math.PI * 5 / 4;
+	this.springDate = Math.PI * 7 / 4;
+	
+	this.currentSeason = "";
+	this.lastSeason = ""
+	
 	this.dayRad = 0;
 	this.seasonRad = 0;
 
 	this.update = function() {
 		this.dayRad = ((Date.now() / 3000) % 2) * Math.PI;
 		this.seasonRad = ((Date.now() / (3000 * daysPerYear)) % 2) * Math.PI;
+		this.lastSeason = this.currentSeason;
+		this.currentSeason = this.getSeason();
+		console.log(this.currentSeason);
 	}
+	
+	this.getSeason = function() {
+		if (this.seasonRad > this.summerDate && this.seasonRad <= this.fallDate)
+			return "SU";
+		else if (this.seasonRad > this.fallDate && this.seasonRad <= this.winterDate)
+			return "FA";
+		else if (this.seasonRad > this.winterDate && this.seasonRad <= this.springDate)
+			return "WI";
+		else
+			return "SP";
+	}
+	this.update();
 }
 
 $(document).ready(function() {
@@ -52,6 +76,7 @@ $(document).ready(function() {
 		scene.rotation.y = time.seasonRad;
 		time.update();
 		TWEEN.update();
+		soil.update(time)
 		maple.update(time);
 		roots.update(time);
 		lighting.update(time);

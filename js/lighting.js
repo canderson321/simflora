@@ -39,7 +39,7 @@ function Lighting() {
 
 	this.update = function(time) {
 		var radians = (Date.now() - this.timeStamp)/1000;
-		sunLight.intensity = 1.5;//Math.sin(radians) + .5;
+		sunLight.intensity = 1.0;//Math.sin(radians) + .5;
 		// moonLight.intensity = .5;//-Math.sin(radians) + .5;
 		sunLight.position.x = 1.8*Math.cos(time.dayRad) + 0;
 		sunLight.position.y = 1.8*Math.sin(time.dayRad) + 0;
