@@ -91,20 +91,11 @@ function MaplePart(parentPart) {
 		geometry.scale(1.0 / 12.0, 1.0 / 18.0, 1.0 / 12.0);
 		geometry.translate(0, -0.6, 0);
 
-		// geometry = new THREE.Geometry();
-		// geometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) );
-		// geometry.vertices.push( new THREE.Vector3( -0.4, 0.2, 0.15 ) );
-		// geometry.vertices.push( new THREE.Vector3( 0, 1, 0 ) );
-		// geometry.vertices.push( new THREE.Vector3( 0.4, 0.2, 0.15 ) );
-
-		// geometry.faces.push( new THREE.Face3( 0, 1, 2 ) ); // counter-clockwise winding order
-		// geometry.faces.push( new THREE.Face3( 0, 2, 3 ) );
-		// geometry.translate(0, -0.5, 0);
-
 		this.numChildren = 0;
 		this.straight = false;
 		this.type = "leaf";
 		this.leafState = "grow";
+		this.tweenRunning = false;
 
 	};
 	geometry.translate(0, .5, 0);
@@ -120,7 +111,19 @@ MaplePart.prototype.update = function(time) {
 
 	var heightFactor = this.lengthFactor;
 	if (this.type === "leaf") {
-		if (time.seasonRad > 5 * Math.PI / 4 && time.seasonRad <= (7 * Math.PI / 4) && this.leafState === "grow" && Math.random() < 0.01) {
+		
+		
+		
+		if (time.seasonRad > Math.PI && time.seasonRad <= 7 * Math.PI / 4) {
+			if (!this.tweenRunning)
+				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: Math.random(), g: Math.random(), b: 0 }, 3000).start();
+			this.tweenRunning = true;
+		} else {
+			this.tweenRunning = false;
+			this.mesh.material.color.setHex(0x68ff03);
+		}
+		
+		if (time.seasonRad > 5 * Math.PI / 4 && time.seasonRad <= 7 * Math.PI / 4 && this.leafState === "grow" && Math.random() < 0.01) {
 			this.leafState = "fall";
 		} else if (time.seasonRad > (7 * Math.PI / 4) && this.leafState === "fall") {
 			this.timestamp = Date.now();
@@ -142,10 +145,11 @@ MaplePart.prototype.update = function(time) {
 	while (age > this.terminalAge && this.childParts.length < this.numChildren && this.level <= 7) {
 		this.childParts.push(new MaplePart(this));
 	};
+	
+	this.group.updateMatrix();
 
 	var self = this;
 	self.childParts.forEach(function(childPart) {
-		childPart.update(time);
 		
 		if (childPart.type === "leaf") {
 
@@ -166,5 +170,6 @@ MaplePart.prototype.update = function(time) {
 		} else {
 			childPart.group.position.y = growthFactor * heightFactor;
 		}
+		childPart.update(time);
 	});
 };

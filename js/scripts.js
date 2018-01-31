@@ -8,15 +8,13 @@ function Time() {
 	this.seasonRad = 0;
 
 	this.update = function() {
-		this.dayRad = ((Date.now() / 3000) % 2) * Math.PI;
-		this.seasonRad = ((Date.now() / (3000 * daysPerSeason)) % 2) * Math.PI;
+		this.dayRad = ((Date.now() / 4000) % 2) * Math.PI;
+		this.seasonRad = ((Date.now() / (4000 * daysPerSeason)) % 2) * Math.PI;
 	}
 }
 
-var scene;
-
 $(document).ready(function() {
-	var renderer = new THREE.WebGLRenderer();
+	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize( window.innerWidth, window.innerHeight);
 	// renderer.shadowMapEnabled = true;
 	document.body.appendChild( renderer.domElement);
@@ -25,7 +23,7 @@ $(document).ready(function() {
 	camera.position.set(0, 3, 20);
 	camera.lookAt(new THREE.Vector3(0, 5, 0));
 
-	scene = new THREE.Scene();
+	var scene = new THREE.Scene();
 
 	var lighting = new Lighting();
 	scene.add(lighting.group);
@@ -41,15 +39,8 @@ $(document).ready(function() {
 	scene.add(roots.group);
 
 
-	// var domEvents   = new THREEx.DomEvents(camera, renderer.domElement)
-	// var sunClicked = false;
-	// domEvents.addEventListener(sunMoon.sunLight, 'click', function(event) {
-	// 	if (sunClicked === false) {
-	// 		sunClicked = true;
-	// 	} else {
-	// 		sunClicked = false;
-	// 	}
-	// })
+	//var audio = new Audio('audio_file.mp3');
+	//audio.play();
 
 	var time = new Time();
 
@@ -58,8 +49,9 @@ $(document).ready(function() {
 
 	function animate() {
 		requestAnimationFrame(animate);
-		//scene.rotation.y += 0.002;
+		scene.rotation.y = time.seasonRad;
 		time.update();
+		TWEEN.update();
 		maple.update(time);
 		roots.update(time);
 		lighting.update(time);
