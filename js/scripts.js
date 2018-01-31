@@ -14,6 +14,11 @@ function Time() {
 }
 
 $(document).ready(function() {
+	document.getElementById('hideMessage').addEventListener( 'click', function(event) {
+
+		document.getElementById('welcome').style.display = 'none';
+	})
+
 	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize( window.innerWidth, window.innerHeight);
 	// renderer.shadowMapEnabled = true;
