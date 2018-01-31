@@ -16,12 +16,11 @@ function Soil() {
 	var material = new THREE.MeshLambertMaterial( { color: 0x917054 } );
 	var bottom = new THREE.Mesh( geometry, material );
 
-	var material = new THREE.MeshLambertMaterial( {color: 0x694f3a} );
-
-
 	this.group = new THREE.Group();
 	this.group.add(this.top);
 	this.group.add(bottom);
+
+	var material = new THREE.MeshLambertMaterial( {color: 0x694f3a} );
 
 	for (var i = 0; i < 90; i++) {
 		var size = Math.random()/2 + .25;
@@ -35,21 +34,39 @@ function Soil() {
 
 	};
 
-	var material = new THREE.MeshLambertMaterial( {color: 0x656b59} );
+
+	var stoneMaterial = new THREE.MeshLambertMaterial( {color: 0x656b59} );
+	var snowMaterial = new THREE.MeshLambertMaterial( {color: 0xffffff} );
+	this.snowGroup = new THREE.Group();
+	this.group.add(this.snowGroup);
+
 	for (var i = 0; i < 8; i++) {
 		var radius = Math.random() + .5;
-		var geometry = new THREE.SphereGeometry(radius, 8, 8 );
+		var stoneGeometry = new THREE.SphereGeometry(radius, 8, 8 );
+		var snowGeometry = new THREE.SphereGeometry(radius*.8, 8, 8);
+
 		var x = 2 + Math.random() * 6.5;
-		geometry.translate(x, 0, 0);
-		var stone = new THREE.Mesh( geometry, material );
-		stone.position.y = Math.cos(Math.PI/20*x);
-		stone.quaternion.setFromEuler(rotateAndTilt(Math.random() * 90, Math.random() * 360));
+		stoneGeometry.translate(x, 0, 0);
+		snowGeometry.translate(x, 0, 0);
+
+		var stone = new THREE.Mesh( stoneGeometry, stoneMaterial );
+		var snow = new THREE.Mesh(snowGeometry, snowMaterial);
+
+		position = Math.cos(Math.PI/20*x);
+		eu = rotateAndTilt(Math.random() * 90, Math.random() * 360);
+
+		stone.position.y = position;
+		snow.position.y = position;
+		stone.quaternion.setFromEuler(eu);
+		snow.quaternion.setFromEuler(eu);
 		stone.scale.set(1, .5, 1);
+		snow.scale.set(1, .5, 1);
 
 		this.group.add(stone);
+		this.snowGroup.add(snow);
 	};
 
-	this.group.scale.set(.09, .09, .09)
+	this.group.scale.set(.09, .09, .09);
 
 
 	//, ,
@@ -58,6 +75,8 @@ function Soil() {
 };
 
 Soil.prototype.update = function(time) {
+	this.snowGroup.position.y = -Math.sin(time.seasonRad)*.3;
+
 	if (time.currentSeason === "WI" && time.lastSeason === "FA") {
 		this.springTween.stop();
 		this.winterTween.start();
