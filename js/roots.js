@@ -29,24 +29,24 @@ function RootPart(parentPart) {
 		var geometry;
 		if (this.level < 4) {
 
-			material = new THREE.MeshLambertMaterial( {color: 0xc4b99a} );
+			material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 			geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
 			this.numChildren = 2
 			this.minAngle = 0;
 			this.maxAngle = 35;
-			this.lengthFactor = 1.7 * Math.random();
+			this.lengthFactor = 1.6 * Math.random();
 			this.widthFactor = 0.5;
 			this.type = "root";
 
 		} else {//if (this.level === 5) {
 
-			material = new THREE.MeshLambertMaterial( {color: 0xc4b99a} );
+			material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 			geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
 			this.numChildren = 1;
 			// this.straight = true;
 			this.minAngle = 10;
 			this.maxAngle = 30;
-			this.lengthFactor = 1.5*Math.random();
+			this.lengthFactor = 1.6*Math.random();
 			this.widthFactor = 0.3;
 			this.type = "root";
 
