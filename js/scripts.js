@@ -30,7 +30,7 @@ $(document).ready(function() {
 	var lighting = new Lighting();
 	scene.add(lighting.group);
 
-	var maple = new MaplePart(undefined);
+	var maple = new MaplePart(undefined, "trunk");
 	scene.add(maple.group);
 
 	var soil = new Soil();
