@@ -3,13 +3,13 @@ function rotateAndTilt(x, y) {
 };
 
 function Time() {
-	var daysPerSeason = 8;
+	var daysPerYear = 4;
 	this.dayRad = 0;
 	this.seasonRad = 0;
 
 	this.update = function() {
 		this.dayRad = ((Date.now() / 3000) % 2) * Math.PI;
-		this.seasonRad = ((Date.now() / (3000 * daysPerSeason)) % 2) * Math.PI;
+		this.seasonRad = ((Date.now() / (3000 * daysPerYear)) % 2) * Math.PI;
 
 		console.log(this.seasonRad);
 	}
@@ -22,7 +22,7 @@ $(document).ready(function() {
 	document.body.appendChild( renderer.domElement);
 
 	var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-	camera.position.set(0, 3, 20);
+	camera.position.set(0, .7, 4);
 	camera.lookAt(new THREE.Vector3(0, 5, 0));
 
 	var scene = new THREE.Scene();
@@ -58,7 +58,7 @@ $(document).ready(function() {
 
 	function animate() {
 		requestAnimationFrame(animate);
-		scene.rotation.y += 0.002;
+		scene.rotation.y += 0.0015;
 		time.update();
 		maple.update(time);
 		roots.update(time);
