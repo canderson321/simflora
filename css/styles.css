@@ -44,12 +44,16 @@ canvas {
 	position: absolute;
 	bottom: 33px;
 	left: 17%;
+	opacity: .4;
+}
+
+#resetButton:hover {
+	opacity: .8;
 }
 
 #resetButton img {
 	width: 40px;
 	height: 40px;
-	opacity: .8;
 	cursor: pointer;
 }
 
