@@ -9,7 +9,7 @@ function Soil() {
 	}
 
 	var topGeometry = new THREE.LatheGeometry( topPoints, 12);
-	var topMaterial = new THREE.MeshLambertMaterial( { color: 0x457045 } );
+	var topMaterial = new THREE.MeshLambertMaterial( { color: 0x456348 } );
 
 	this.top = new THREE.Mesh( topGeometry, topMaterial );
 	this.top.castShadow = true;
@@ -25,7 +25,10 @@ function Soil() {
 	this.group = new THREE.Group();
 	this.stoneSnow = new THREE.Group();
 	this.groundSnow = new THREE.Group();
+	this.stoneMoss = new THREE.Group();
+
 	this.group.add(this.stoneSnow);
+	this.group.add(this.stoneMoss);
 	this.group.add(this.groundSnow);
 
 	var snowMaterial = new THREE.MeshLambertMaterial( { color: 0xffffff } );
@@ -75,36 +78,47 @@ function Soil() {
 
 
 	var stoneMaterial = new THREE.MeshLambertMaterial( {color: 0x656b59} );
+	var mossMaterial = new THREE.MeshLambertMaterial( {color: 0x4d5e35} );
 
 	for (var i = 0; i < 8; i++) {
 		var radius = Math.random() + .5;
 		var stoneGeometry = new THREE.SphereGeometry(radius, 8, 8 );
 		var snowGeometry = new THREE.SphereGeometry(radius*.9, 8, 8);
+		var mossGeometry = new THREE.SphereGeometry(radius*.95, 8, 8);
+
 
 		var x = 2 + Math.random() * 6.5;
 		stoneGeometry.translate(x, 0, 0);
 		snowGeometry.translate(x, 0, 0);
+		mossGeometry.translate(x, 0, 0);
 
 		var stone = new THREE.Mesh( stoneGeometry, stoneMaterial );
 		var snow = new THREE.Mesh(snowGeometry, snowMaterial);
+		var moss = new THREE.Mesh(mossGeometry, mossMaterial);
 
 		// stone.castShadow = true;
-
 
 		position = Math.cos(Math.PI/20*x);
 		eu = rotateAndTilt(Math.random() * 90, Math.random() * 360);
 
 		stone.position.y = position;
 		snow.position.y = position;
+		moss.position.y = position;
+
 		stone.quaternion.setFromEuler(eu);
 		snow.quaternion.setFromEuler(eu);
+		moss.quaternion.setFromEuler(eu);
+
 		stone.scale.set(1, .5, 1);
 		snow.scale.set(1, .5, 1);
+		moss.scale.set(1, .5, 1);
 
 		this.group.add(stone);
 		this.stoneSnow.add(snow);
+		this.stoneMoss.add(moss);
 	};
 
+	this.stoneMoss.position.y = .07
 	this.group.scale.set(.05, .05, .05);
 
 
@@ -118,8 +132,8 @@ Soil.prototype.update = function(time) {
 
 	var snowHeight = -Math.sin(time.seasonRad)*.3;
 	if (snowHeight > 0) {
-		this.stoneSnow.position.y = -Math.sin(time.seasonRad)*.25;
-		this.groundSnow.position.y = -Math.sin(time.seasonRad)*.1;
+		this.stoneSnow.position.y = -Math.sin(time.seasonRad)*.4;
+		this.groundSnow.position.y = -Math.sin(time.seasonRad)*.09;
 		this.groundSnow.scale.set(1, 1 + snowHeight*.2, 1)
 
 	}

@@ -42,7 +42,8 @@ function Lighting() {
 		var radians = (Date.now() - this.timeStamp)/1000;
 		this.innerPlane.rotation.x = time.dayRad;
 		this.outerPlane.rotation.z = .384 - .384*Math.sin(time.seasonRad);
-		ambient.intensity = Math.abs(Math.cos(time.dayRad))*.6 + .9;
+
+		ambient.intensity = Math.abs(Math.cos(time.dayRad))*.6 + 1.4;
 		winterLight.intensity = -Math.sin(time.seasonRad)*.4;
 		
 	};

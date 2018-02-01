@@ -8,20 +8,20 @@ function Geometry() {
 	
 	Geometry.stem;
 	Geometry.stemMat = new THREE.MeshLambertMaterial( {color: 0xb57566} );
-	
+
 	Geometry.leaf;
 	Geometry.leafMat = new THREE.MeshStandardMaterial( {color: 0x68ff03} );
 	Geometry.leafMat.side = THREE.DoubleSide;
-	
+
 	Geometry.branch;
 	Geometry.branchMat = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
+
 	Geometry.branchMatTex = new THREE.MeshLambertMaterial( {map: texture} );
-	
-	
+
 	Geometry.init = function() {
 		Geometry.stem = new THREE.CylinderGeometry(.014, .04, 0.5, 3, 1, true );
 		Geometry.stem.translate(0, 0.25, 0);
-		
+
 		Geometry.leaf = new THREE.Geometry();
 		Geometry.leaf.vertices.push( new THREE.Vector3( 0, 24, 0 ) ); // 0
 		Geometry.leaf.vertices.push( new THREE.Vector3( 3, 18, 0 ) ); // 1
@@ -42,11 +42,11 @@ function Geometry() {
 
 		Geometry.leaf.scale(1 / 12.0, 1 / 18.0, 1 / 12.0);
 		Geometry.leaf.translate(0, -0.1, 0);
-		
+
 		Geometry.branch = new THREE.CylinderGeometry(.07, .1, 1, 5, 1, true );
 		Geometry.branch.translate(0, .5, 0);
 	}
-	
+
 	Geometry.init();
 }
 
@@ -78,7 +78,7 @@ function MaplePart(parentPart, type) {
 	if (type === "leaf") {
 		this.level = 5;
 		this.budGrowth = 5;
-		
+
 		material = Geometry.stemMat;
 		geometry = Geometry.stem;
 		var stem = new THREE.Mesh(geometry, material);
@@ -88,7 +88,7 @@ function MaplePart(parentPart, type) {
 
 		this.numChildren = 0;
 		this.lengthFactor = .6;
-		this.widthFactor = 0.4;
+		this.widthFactor = 0.35;
 		this.leafState = "grow";
 		this.tweenRunning = false;
 
@@ -100,7 +100,7 @@ function MaplePart(parentPart, type) {
 		this.minAngle = 20;
 		this.maxAngle = 60;
 		this.lengthFactor = .6;
-		this.widthFactor = .3;
+		this.widthFactor = .33;
 		this.childParts.push(new MaplePart(this, undefined));
 		this.childParts.push(new MaplePart(this, "leaf"));
 		this.childParts.push(new MaplePart(this, "leaf"));
@@ -113,7 +113,7 @@ function MaplePart(parentPart, type) {
 		this.minAngle = 20;
 		this.maxAngle = 60;
 		this.lengthFactor = Math.random()*.6 + .3;
-		this.widthFactor = .3;
+		this.widthFactor = .25;
 
 		this.type = "branch";
 
@@ -128,7 +128,7 @@ function MaplePart(parentPart, type) {
 		this.minAngle = 90;
 		this.maxAngle = 90;
 		this.lengthFactor = Math.random()*.6 + .3;
-		this.widthFactor = 0.25;
+		this.widthFactor = 0.15;
 		this.type = "twig";
 
 		this.childParts.push(new MaplePart(this, "leaf"));
@@ -146,8 +146,8 @@ function MaplePart(parentPart, type) {
 MaplePart.prototype.update = function(time, lastTime) {
 
 	var timeDelta = time.delta/1000;
-	var growthiness = Math.sin(Math.PI/8 + time.seasonRad) + .3;
-	if (growthiness > 0) this.growth = this.growth + timeDelta*growthiness;
+	var growthRate = Math.sin(Math.PI/8 + time.seasonRad)*.8 + .1;
+	if (growthRate > 0) this.growth = this.growth + timeDelta*growthRate;
 
 	var growthFactor = undefined;
 	if (this.growth < 60) {
@@ -219,13 +219,13 @@ MaplePart.prototype.update = function(time, lastTime) {
 }
 
 function dispose(obj) {
-	
+
 	if (typeof(obj.children) !== "undefined") {
 		obj.children.forEach(function(child) {
 			this.dispose(child);
 		});
 	}
-	
+
 	if (typeof(obj.geometry) !== "undefined")
 		obj.geometry.dispose();
 	if (typeof(obj.material) !== "undefined")
