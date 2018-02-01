@@ -139,8 +139,8 @@ function MaplePart(parentPart, type) {
 MaplePart.prototype.update = function(time, lastTime) {
 
 	var timeDelta = time.delta/1000;
-	var growthiness = Math.sin(Math.PI/8 + time.seasonRad) + .3;
-	if (growthiness > 0) this.growth = this.growth + timeDelta*growthiness;
+	var growthRate = Math.sin(Math.PI/8 + time.seasonRad)*.8 + .1;
+	if (growthRate > 0) this.growth = this.growth + timeDelta*growthRate;
 
 	var growthFactor = undefined;
 	if (this.growth < 60) {
@@ -212,13 +212,13 @@ MaplePart.prototype.update = function(time, lastTime) {
 }
 
 function dispose(obj) {
-	
+
 	if (typeof(obj.children) !== "undefined") {
 		obj.children.forEach(function(child) {
 			this.dispose(child);
 		});
 	}
-	
+
 	if (typeof(obj.geometry) !== "undefined")
 		obj.geometry.dispose();
 	if (typeof(obj.material) !== "undefined")
