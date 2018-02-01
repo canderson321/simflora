@@ -69,6 +69,11 @@ $(document).ready(function() {
 	document.getElementById("timeRate").oninput = function() {
 		timeRate = document.getElementById("timeRate").value;
 	}
+
+	document.getElementById("resetIcon").addEventListener( 'click', function(event) {
+
+	})
+	
 	var controls = new THREE.OrbitControls(camera,  renderer.domElement);
 	controls.addEventListener('change', function() {renderer.render(scene, camera);});
 
