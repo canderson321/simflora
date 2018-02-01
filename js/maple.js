@@ -69,12 +69,10 @@ function MaplePart(parentPart, type) {
 		this.minAngle = 20;
 		this.maxAngle = 60;
 		this.lengthFactor = .6;
-		this.widthFactor = .35;
+		this.widthFactor = .3;
 		this.childParts.push(new MaplePart(this, undefined));
 		this.childParts.push(new MaplePart(this, "leaf"));
 		this.childParts.push(new MaplePart(this, "leaf"));
-		this.group.position.y = .1;
-
 	} else if (this.level < 6) {
 
 		material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
@@ -84,7 +82,7 @@ function MaplePart(parentPart, type) {
 		this.minAngle = 20;
 		this.maxAngle = 60;
 		this.lengthFactor = Math.random()*.6 + .3;
-		this.widthFactor = .35;
+		this.widthFactor = .3;
 
 		this.type = "branch";
 
@@ -99,7 +97,7 @@ function MaplePart(parentPart, type) {
 		this.minAngle = 90;
 		this.maxAngle = 90;
 		this.lengthFactor = Math.random()*.6 + .3;
-		this.widthFactor = 0.35;
+		this.widthFactor = 0.25;
 		this.type = "twig";
 
 		this.childParts.push(new MaplePart(this, "leaf"));
@@ -121,10 +119,11 @@ MaplePart.prototype.update = function(time, lastTime) {
 	var growthiness = Math.sin(Math.PI/8 + time.seasonRad) + .3;
 	if (growthiness > 0) this.growth = this.growth + timeDelta*growthiness;
 
+	var growthFactor = undefined;
 	if (this.growth < 60) {
-		var growthFactor = Math.log(this.growth/12+1) / (this.level*1.1 + 1);
+		growthFactor = Math.log(this.growth/12+1) / (this.level*1.2 + 1);
 	} else {
-		growthFactor = Math.log(60/12+1) / (this.level*1.1 + 1);
+		growthFactor = Math.log(60/12+1) / (this.level*1.2 + 1);
 	}
 
 	var heightFactor = this.lengthFactor;
@@ -187,6 +186,7 @@ MaplePart.prototype.update = function(time, lastTime) {
 		});
 	}
 
+//maybe remove
 	this.group.updateMatrix();
 
 
