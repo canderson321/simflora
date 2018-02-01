@@ -34,7 +34,11 @@ $(document).ready(function() {
 	document.getElementById("timeRate").oninput = function() {
 		time.setRate(document.getElementById("timeRate").value);
 	}
-	
+
+	document.getElementById("resetIcon").addEventListener( 'click', function(event) {
+		
+	})
+
 	Geometry();
 
 	var renderer = new THREE.WebGLRenderer({antialias: true});
@@ -72,7 +76,7 @@ $(document).ready(function() {
 
 	var controls = new THREE.OrbitControls(camera,  renderer.domElement);
 	controls.addEventListener('change', function() {renderer.render(scene, camera);});
-	
+
 
 	function animate() {
 		requestAnimationFrame(animate);
