@@ -1,10 +1,13 @@
 function Time() {
+	
+	Time.timeRate = 1;
 
 	this.time = 0;
 	this.lastTime = 0;
 	this.delta = 0;
 
 	var daysPerYear = 8;
+	var dayLength = 3000;
 	this.summerDate = Math.PI / 4;
 	this.fallDate = Math.PI * 3 / 4;
 	this.winterDate = Math.PI * 5 / 4;
@@ -19,8 +22,8 @@ function Time() {
 	this.update = function(rate) {
 
 		var now = Date.now();
-		this.dayRad = ((now * rate / 3000) % 2) * Math.PI;
-		this.seasonRad = ((now * rate / (3000 * daysPerYear)) % 2) * Math.PI;
+		this.dayRad = ((now * rate / dayLength) % 2) * Math.PI;
+		this.seasonRad = ((now * rate / (dayLength * daysPerYear)) % 2) * Math.PI;
 		this.lastSeason = this.currentSeason;
 		this.currentSeason = this.getSeason();
 
@@ -41,4 +44,3 @@ function Time() {
 	}
 	this.update();
 }
-var timeRate = 1;

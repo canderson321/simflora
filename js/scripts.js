@@ -77,7 +77,7 @@ $(document).ready(function() {
 	function animate() {
 		requestAnimationFrame(animate);
 		scene.rotation.y += .001;
-		time.update(timeRate);
+		time.update(1);
 		TWEEN.update();
 		soil.update(time)
 		maple.update(time);
