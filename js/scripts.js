@@ -36,9 +36,6 @@ $(document).ready(function() {
 		time.setRate(document.getElementById("timeRate").value);
 	}
 
-	document.getElementById("resetIcon").addEventListener( 'click', function(event) {
-		
-	})
 
 	Geometry();
 
@@ -54,6 +51,7 @@ $(document).ready(function() {
 	camera.lookAt(new THREE.Vector3(0, 5, 0));
 
 	var scene = new THREE.Scene();
+	
 
 	var lighting = new Lighting();
 	scene.add(lighting.group);
@@ -70,6 +68,24 @@ $(document).ready(function() {
 	var roots = new RootPart(undefined);
 	roots.group.rotation.x = Math.PI;
 	scene.add(roots.group);
+	
+	
+	$("#resetIcon").click (function() {	
+		
+		
+		scene.remove(maple.group);
+		dispose(maple.group);
+		
+		maple = new MaplePart(undefined, "trunk");
+		scene.add(maple.group);
+		
+		scene.remove(roots.group);
+		dispose(roots.group);
+		
+		roots = new RootPart(undefined);
+		roots.group.rotation.x = Math.PI;
+		scene.add(roots.group);
+	});
 
 
 	//var audio = new Audio('audio_file.mp3');

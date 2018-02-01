@@ -43,7 +43,7 @@ function Time() {
 		this.lastSeason = this.currentSeason;
 		this.currentSeason = this.getSeason();
 		
-		console.log(this.delta);
+		//console.log(this.delta);
 		
 	}
 

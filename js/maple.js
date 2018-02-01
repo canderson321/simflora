@@ -209,9 +209,18 @@ MaplePart.prototype.update = function(time, lastTime) {
 			childPart.update(time);
 		});
 	}
+}
 
-//maybe remove
-	this.group.updateMatrix();
-
-
-};
+function dispose(obj) {
+	
+	if (typeof(obj.children) !== "undefined") {
+		obj.children.forEach(function(child) {
+			this.dispose(child);
+		});
+	}
+	
+	if (typeof(obj.geometry) !== "undefined")
+		obj.geometry.dispose();
+	if (typeof(obj.material) !== "undefined")
+		obj.material.dispose();
+}
