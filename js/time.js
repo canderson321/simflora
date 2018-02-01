@@ -1,5 +1,5 @@
 function Time() {
-	
+
 	this.timeRate = 1;
 	this.setRate = function(rate){
 		this.timeRate = rate;
@@ -9,7 +9,6 @@ function Time() {
 	
 	this.systemTime = Date.now();
 	this.lastSystemTime = this.systemTime;
-	
 
 	this.time = 0;
 	this.delta = 0;
@@ -26,6 +25,8 @@ function Time() {
 
 	this.dayRad = 0;
 	this.seasonRad = 0;
+	
+	this.start = false;
 
 	this.update = function() {
 

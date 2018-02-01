@@ -21,9 +21,10 @@ function Stars() {
 	bufferGeo.fromGeometry(starField)
 	this.group.add(new THREE.Mesh(bufferGeo, material));
 }
-var growthStart = false;
 
 $(document).ready(function() {
+
+	var growthStart = false;
 	document.getElementById('hideMessage').addEventListener( 'click', function(event) {
 		growthStart = true;
 		document.getElementById('welcome').style.display = 'none';
@@ -77,15 +78,16 @@ $(document).ready(function() {
 	var controls = new THREE.OrbitControls(camera,  renderer.domElement);
 	controls.addEventListener('change', function() {renderer.render(scene, camera);});
 
-
+	time.update();
+	maple.update(time);
+	roots.update(time);
 	function animate() {
 		requestAnimationFrame(animate);
 		scene.rotation.y += .001 * time.timeRate;
-		time.update();
 		TWEEN.update();
 		soil.update(time)
-		maple.update(time);
-		roots.update(time);
+		if (growthStart) maple.update(time);
+		if (growthStart) roots.update(time);
 		lighting.update(time);
 		renderer.render(scene, camera);
 		lastTime = Date.now();
