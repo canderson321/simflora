@@ -21,18 +21,8 @@ function Stars() {
 	bufferGeo.fromGeometry(starField)
 	this.group.add(new THREE.Mesh(bufferGeo, material));
 }
-var growthStart = false;
 
 $(document).ready(function() {
-	document.getElementById('hideMessage').addEventListener( 'click', function(event) {
-		growthStart = true;
-		document.getElementById('welcome').style.display = 'none';
-	})
-
-	document.getElementById("timeRate").oninput = function() {
-		timeRate = document.getElementById("timeRate").value;
-	}
-	
 	Geometry();
 
 	var renderer = new THREE.WebGLRenderer({antialias: true});
@@ -70,18 +60,28 @@ $(document).ready(function() {
 
 	var time = new Time();
 
+	var growthStart = false;
+	document.getElementById('hideMessage').addEventListener( 'click', function(event) {
+		time.start = true;
+		document.getElementById('welcome').style.display = 'none';
+	})
+
+	document.getElementById("timeRate").oninput = function() {
+		timeRate = document.getElementById("timeRate").value;
+	}
 	var controls = new THREE.OrbitControls(camera,  renderer.domElement);
 	controls.addEventListener('change', function() {renderer.render(scene, camera);});
-	
 
+	maple.update(time);
+	roots.update(time);
 	function animate() {
 		requestAnimationFrame(animate);
 		scene.rotation.y += .001;
 		time.update(1);
 		TWEEN.update();
 		soil.update(time)
-		maple.update(time);
-		roots.update(time);
+		if (time.start) maple.update(time);
+		if (time.start) roots.update(time);
 		lighting.update(time);
 		renderer.render(scene, camera);
 		lastTime = Date.now();

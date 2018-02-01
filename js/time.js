@@ -1,5 +1,5 @@
 function Time() {
-	
+
 	Time.timeRate = 1;
 
 	this.time = 0;
@@ -18,6 +18,8 @@ function Time() {
 
 	this.dayRad = 0;
 	this.seasonRad = 0;
+	
+	this.start = false;
 
 	this.update = function(rate) {
 
