@@ -24,20 +24,21 @@ canvas {
 	margin-top: auto;
 	color: whitesmoke;
 	text-align: center;
-
-
 }
 
 #hideMessage {
-	/*height: auto;*/
-	width: 38%;
-	margin-left: 31%;
-	margin-right: 31%;
+	width: 20%;
+	margin-left: 40%;
 	left: 50%;
 	margin-top: 30px;
 	padding-bottom: 5px;
 	border: 1px solid white;
 	cursor: pointer;
+	opacity: .7;
+}
+
+#hideMessage:hover {
+	opacity: 1;
 }
 
 #resetButton {
