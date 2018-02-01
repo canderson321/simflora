@@ -82,6 +82,7 @@ $(document).ready(function() {
 	maple.update(time);
 	roots.update(time);
 	function animate() {
+		time.update();
 		requestAnimationFrame(animate);
 		scene.rotation.y += .001 * time.timeRate;
 		TWEEN.update();
