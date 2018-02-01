@@ -4,7 +4,7 @@ function Lighting() {
 	var ambient = new THREE.AmbientLight(0x606060);
 
 	var sunGeometry = new THREE.SphereGeometry( .04, 16, 16 );
-	var sunLight = new THREE.DirectionalLight( 0xffffee, 1, 100, 2 );
+	var sunLight = new THREE.DirectionalLight( 0xfffed3, 1, 100, 2 );
 	var sunMaterial = new THREE.MeshStandardMaterial( {
 		emissive: 0xffffee,
 		emissiveIntensity: 1,

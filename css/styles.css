@@ -27,24 +27,34 @@ canvas {
 }
 
 #hideMessage {
-	height: 70px;
+	height: auto;
 	width: 38%;
 	/* margin-left: -100px; */
 	margin-left: 31%;
 	margin-right: 31%;
 	left: 50%;
 	margin-top: 30px;
-	padding: auto;
+	padding-bottom: 20px
 	border: 1px solid whitesmoke;
 }
 
+#resetButton {
+	position: absolute;
+	bottom: 25px;
+	left: 15%;
+}
+
+#resetButton img {
+	width: 40px;
+	height: 40px;
+}
 
 .slidecontainer {
 	z-index: 10;
 	position: absolute;
 	bottom: 50px;
-	width: 80%;
-	left: 10%;
+	width: 60%;
+	left: 20%;
 }
 
 .slider {
