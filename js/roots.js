@@ -33,7 +33,7 @@ function RootPart(parentPart) {
 			this.numChildren = 2
 			this.minAngle = 0;
 			this.maxAngle = 30;
-			this.lengthFactor = 1 * Math.random();
+			this.lengthFactor = 1.1 * Math.random();
 			this.widthFactor = 0.35;
 			this.type = "root";
 
@@ -45,7 +45,7 @@ function RootPart(parentPart) {
 			this.numChildren = 1;
 			this.minAngle = 10;
 			this.maxAngle = 30;
-			this.lengthFactor = 1.2*Math.random() + .1;
+			this.lengthFactor = 1.3*Math.random() + .1;
 			this.widthFactor = 0.3;
 			this.type = "rootlet";
 
