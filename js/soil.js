@@ -10,14 +10,19 @@ function Soil() {
 
 	var geometry = new THREE.LatheGeometry( topPoints );
 	var material = new THREE.MeshLambertMaterial( { color: 0x508552 } );
-	this.top = new THREE.Mesh( geometry, material );
-
+	var top = new THREE.Mesh( geometry, material );
+	top.castShadow = true;
+	top.receiveShadow = true;
+	
+	
 	var geometry = new THREE.LatheGeometry( bottomPoints );
 	var material = new THREE.MeshLambertMaterial( { color: 0x917054 } );
 	var bottom = new THREE.Mesh( geometry, material );
+	bottom.castShadow = true;
+	//bottom.receiveShadow = true;
 
 	this.group = new THREE.Group();
-	this.group.add(this.top);
+	this.group.add(top);
 	this.group.add(bottom);
 
 	var material = new THREE.MeshLambertMaterial( {color: 0x694f3a} );
@@ -31,6 +36,8 @@ function Soil() {
 		clod.position.y = -3*(1+Math.cos(Math.PI/10*x))*Math.random() - .4;
 		clod.quaternion.setFromEuler(rotateAndTilt(Math.random() * 90, Math.random() * 360));
 		this.group.add(clod);
+		//clod.castShadow = true;
+		clod.receiveShadow = true;
 
 	};
 
@@ -51,6 +58,9 @@ function Soil() {
 
 		var stone = new THREE.Mesh( stoneGeometry, stoneMaterial );
 		var snow = new THREE.Mesh(snowGeometry, snowMaterial);
+		
+		stone.castShadow = true;
+		
 
 		position = Math.cos(Math.PI/20*x);
 		eu = rotateAndTilt(Math.random() * 90, Math.random() * 360);
@@ -70,10 +80,8 @@ function Soil() {
 
 
 	//, ,
-	this.winterTween = new TWEEN.Tween(this.top.material.color).to({r: 1, g: 1, b: 1 }, 500);
-	this.springTween = new TWEEN.Tween(this.top.material.color).to({r: 0.314, g: 0.522, b: 0.322 }, 1000);
-	this.top.castShadow = true;
-	this.top.receiveShadow = true;
+	this.winterTween = new TWEEN.Tween(top.material.color).to({r: 1, g: 1, b: 1 }, 500);
+	this.springTween = new TWEEN.Tween(top.material.color).to({r: 0.314, g: 0.522, b: 0.322 }, 1000);
 };
 
 Soil.prototype.update = function(time) {
