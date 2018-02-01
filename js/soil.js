@@ -8,17 +8,34 @@ function Soil() {
 		bottomPoints.push(new THREE.Vector2(i, -2*(1+Math.cos(Math.PI/10*i))));
 	}
 
-	var geometry = new THREE.LatheGeometry( topPoints );
-	var material = new THREE.MeshLambertMaterial( { color: 0x508552 } );
-	this.top = new THREE.Mesh( geometry, material );
+	var topGeometry = new THREE.LatheGeometry( topPoints, 80);
+	var topMaterial = new THREE.MeshLambertMaterial( { color: 0x508552 } );
 
-	var geometry = new THREE.LatheGeometry( bottomPoints );
-	var material = new THREE.MeshLambertMaterial( { color: 0x917054 } );
-	var bottom = new THREE.Mesh( geometry, material );
+	this.top = new THREE.Mesh( topGeometry, topMaterial );
+
+	var snowMaterial = new THREE.MeshLambertMaterial( { color: 0xffffff } );
+	this.snow = new THREE.Mesh( topGeometry, snowMaterial );
+	this.snow.scale.set(1, 1.2, 1);
+
+
+	var rimGeometry = new THREE.TorusGeometry(10, .5, 16, 80);
+	// rimGeometry.translate(-.25, 0, 0);
+	// var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+	this.rim = new THREE.Mesh(rimGeometry, topMaterial);
+	this.rim.rotation.x = Math.PI/2;
+	this.rim.position.y = -.5;
+
+	var bottomGeometry = new THREE.LatheGeometry( bottomPoints );
+	var bottomMaterial = new THREE.MeshLambertMaterial( { color: 0x917054 } );
+	this.bottom = new THREE.Mesh( bottomGeometry, bottomMaterial );
+	this.bottom.position.y = -.8;
 
 	this.group = new THREE.Group();
 	this.group.add(this.top);
-	this.group.add(bottom);
+	this.group.add(this.rim);
+
+	this.group.add(this.snow)
+	this.group.add(this.bottom);
 
 	var material = new THREE.MeshLambertMaterial( {color: 0x694f3a} );
 
@@ -70,19 +87,25 @@ function Soil() {
 
 
 	//, ,
-	this.winterTween = new TWEEN.Tween(this.top.material.color).to({r: 1, g: 1, b: 1 }, 500);
-	this.springTween = new TWEEN.Tween(this.top.material.color).to({r: 0.314, g: 0.522, b: 0.322 }, 1000);
+	// this.winterTween = new TWEEN.Tween(this.top.material.color).to({r: 1, g: 1, b: 1 }, 500);
+	// this.springTween = new TWEEN.Tween(this.top.material.color).to({r: 0.314, g: 0.522, b: 0.322 }, 1000);
 };
 
 Soil.prototype.update = function(time) {
-	var snowHeight = -Math.sin(time.seasonRad)*.3;
-	if (snowHeight > 0) this.snowGroup.position.y = -Math.sin(time.seasonRad)*.3;
 
-	if (time.currentSeason === "WI" && time.lastSeason === "FA") {
-		this.springTween.stop();
-		this.winterTween.start();
-	} else if (time.currentSeason === "SP" && time.lastSeason === "WI") {
-		this.winterTween.stop();
-		this.springTween.start();
+
+	var snowHeight = -Math.sin(time.seasonRad)*.3;
+	if (snowHeight > 0) {
+		this.snowGroup.position.y = -Math.sin(time.seasonRad)*.3;
+		this.snow.position.y = -.2-Math.sin(time.seasonRad)*.3;
+
 	}
+
+	// if (time.currentSeason === "WI" && time.lastSeason === "FA") {
+	// 	this.springTween.stop();
+	// 	this.winterTween.start();
+	// } else if (time.currentSeason === "SP" && time.lastSeason === "WI") {
+	// 	this.winterTween.stop();
+	// 	this.springTween.start();
+	// }
 }
