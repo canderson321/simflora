@@ -85,7 +85,7 @@ $(document).ready(function() {
 	document.body.appendChild( renderer.domElement);
 
 	var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-	camera.position.set(0, .7, 5);
+	camera.position.set(0, .3, 2.5);
 	camera.lookAt(new THREE.Vector3(0, 5, 0));
 
 	var scene = new THREE.Scene();

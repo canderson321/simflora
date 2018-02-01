@@ -27,12 +27,15 @@ canvas {
 }
 
 #hideMessage {
+	height: 70px;
+	width: 38%;
+	/* margin-left: -100px; */
+	margin-left: 31%;
+	margin-right: 31%;
+	left: 50%;
+	margin-top: 30px;
 	padding: auto;
 	border: 1px solid whitesmoke;
-	margin-top: 30px;
-	margin-left: 20%;
-	margin-right: 20%;
-	height: 70px;
 }
 
 
