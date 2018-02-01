@@ -74,6 +74,8 @@ $(document).ready(function() {
 	})
 
 	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.shadowMap.enabled = true;
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 	renderer.setSize( window.innerWidth, window.innerHeight);
 	// renderer.shadowMapEnabled = true;
 	document.body.appendChild( renderer.domElement);

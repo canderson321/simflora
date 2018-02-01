@@ -1,7 +1,7 @@
 function MaplePart(parentPart, type) {
 	this.childParts = [];
 	this.timestamp = Date.now();
-	this.age = 0.00001;
+	this.growth = 0.00001;
 	this.group = new THREE.Group();
 	this.mesh;
 
@@ -10,7 +10,6 @@ function MaplePart(parentPart, type) {
 	this.widthFactor = 0.65;
 
 	this.type = type;
-	//console.log(type);
 	if (type === "trunk") {
 		this.level = 1;
 	} else {
@@ -25,7 +24,7 @@ function MaplePart(parentPart, type) {
 	var geometry;
 	if (type === "leaf") {
 		this.level = 5;
-		this.terminalAge = 5;
+		this.budGrowth = 5;
 		material = new THREE.MeshLambertMaterial( {color: 0xb57566} );
 		geometry = new THREE.CylinderGeometry(.014, .04, 0.5, 3, 1, true );
 		geometry.translate(0, 0.25, 0);
@@ -57,16 +56,15 @@ function MaplePart(parentPart, type) {
 		geometry.translate(0, -0.6, 0);
 
 		this.numChildren = 0;
-		this.lengthFactor = .9;
-		this.widthFactor = 0.6;
-		// this.straight = false;
+		this.lengthFactor = .6;
+		this.widthFactor = 0.4;
 		this.leafState = "grow";
 		this.tweenRunning = false;
 
 	} else if (this.level === 1) {
 		material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 5, 1, true );
-		this.terminalAge = 7;
+		this.budGrowth = 7;
 		this.numChildren = 6;
 		this.minAngle = 20;
 		this.maxAngle = 60;
@@ -81,7 +79,7 @@ function MaplePart(parentPart, type) {
 
 		material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
-		this.terminalAge = 7;
+		this.budGrowth = 7;
 		this.numChildren = 5;
 		this.minAngle = 20;
 		this.maxAngle = 60;
@@ -96,16 +94,14 @@ function MaplePart(parentPart, type) {
 
 		material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 		geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
-		this.terminalAge = 6;
+		this.budGrowth = 6;
 		this.numChildren = 5;
-		// this.straight = false;
 		this.minAngle = 90;
 		this.maxAngle = 90;
 		this.lengthFactor = Math.random()*.6 + .3;
 		this.widthFactor = 0.35;
 		this.type = "twig";
 
-		// this.childParts.push(new MaplePart(this, "leaf"));
 		this.childParts.push(new MaplePart(this, "leaf"));
 		this.childParts.push(new MaplePart(this, "leaf"));
 	};
@@ -117,21 +113,16 @@ function MaplePart(parentPart, type) {
 	};
 	this.group.add(this.mesh);
 	this.mesh.castShadow = true;
-	this.mesh.receiveShadow = false;
 };
 
-MaplePart.prototype.update = function(time) {
-	
+MaplePart.prototype.update = function(time, lastTime) {
+
 	var timeDelta = time.delta/1000;
-	if(time.currentSeason !== "FA" && time.currentSeason !== "WI") {
-		this.age = this.age + timeDelta;
-	} else {
-		this.age = this.age + timeDelta / 10.0;
-	}
-	
-	var growthFactor = 0;
-	if (this.age < 60) {
-		growthFactor = Math.log(this.age/12+1) / (this.level*1.1 + 1);
+	var growthiness = Math.sin(Math.PI/8 + time.seasonRad) + .3;
+	if (growthiness > 0) this.growth = this.growth + timeDelta*growthiness;
+
+	if (this.growth < 60) {
+		var growthFactor = Math.log(this.growth/12+1) / (this.level*1.1 + 1);
 	} else {
 		growthFactor = Math.log(60/12+1) / (this.level*1.1 + 1);
 	}
@@ -139,20 +130,19 @@ MaplePart.prototype.update = function(time) {
 	var heightFactor = this.lengthFactor;
 	if (this.type === "leaf") {
 
-		// leaf color
 		if (time.currentSeason === "FA" && time.lastSeason === "SU") {
 			if (!this.tweenRunning) {
 				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: 0.85, g: 1, b: 0 }, 2000);
-				var otherTween = new TWEEN.Tween(this.mesh.material.color).to({r: 1, g: 0.3984375, b: 0 }, 1000);
-				this.tween.delay(Math.random() * 1000);
-				
+				var otherTween = new TWEEN.Tween(this.mesh.material.color).to({r: 1, g: 0.3984375, b: 0 }, 2000);
+				this.tween.delay(Math.random() * 2200);
+
 				var self = this;
 				otherTween.onComplete(function(obj){
 					self.leafState = "fall";
 				});
-				
+
 				this.tween.chain(otherTween);
-				
+
 				this.tween.start();
 				this.tweenRunning = true;
 			}
@@ -164,27 +154,27 @@ MaplePart.prototype.update = function(time) {
 			this.mesh.material.color.setHex(0x68ff03);
 			this.leafState = "grow"
 		}
-		
+
 		if(this.leafState === "fall") {
-			this.age = 0.00000001;
+			this.growth = 0.000001;
 		} else {
 			this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
 		}
-		
-		
+
+
 	} else {
 		this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
 
-		while (this.age > this.terminalAge && this.childParts.length < this.numChildren && this.level < 6) {
+		while (this.growth > this.budGrowth && this.childParts.length < this.numChildren && this.level < 6) {
 			this.childParts.push(new MaplePart(this, undefined));
 		};
-		
-		
+
+
 		var self = this;
 		self.childParts.forEach(function(childPart) {
 			if (childPart.type === "leaf" && childPart.leafState === "fall") {
-				var vector = self.group.localToWorld( new THREE.Vector3( 0, -1, 0 ) );
 				//var vector = self.group.worldToLocal( new THREE.Vector3( 0, -1, 0 ) );
+				var vector = self.group.localToWorld( new THREE.Vector3( 0, -1, 0 ) );
 				vector.normalize();
 				childPart.group.position.x += vector.x * 0.005;
 				childPart.group.position.y += vector.y * 0.005;
@@ -193,7 +183,6 @@ MaplePart.prototype.update = function(time) {
 				childPart.group.position.y = growthFactor * heightFactor;
 				childPart.group.position.x = 0;
 				childPart.group.position.z = 0;
-				
 			}
 			childPart.update(time);
 		});
@@ -201,5 +190,5 @@ MaplePart.prototype.update = function(time) {
 
 	this.group.updateMatrix();
 
-	
+
 };
