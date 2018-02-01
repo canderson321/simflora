@@ -39,7 +39,7 @@ $(document).ready(function() {
 
 	Geometry();
 
-	var renderer = new THREE.WebGLRenderer({antialias: true});
+	var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 	renderer.setSize( window.innerWidth, window.innerHeight);
@@ -51,6 +51,7 @@ $(document).ready(function() {
 	camera.lookAt(new THREE.Vector3(0, 5, 0));
 
 	var scene = new THREE.Scene();
+	scene.background = new THREE.Color( 0x000000 );
 	
 
 	var lighting = new Lighting();

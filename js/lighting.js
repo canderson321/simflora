@@ -13,50 +13,38 @@ function Lighting() {
 	sunLight.add( new THREE.Mesh( sunGeometry, sunMaterial ));
 	sunLight.position.set( 0, 1.2, 0 );
 	sunLight.castShadow = true;
-	//sunLight.shadowDarkness = 0.5;
-	sunLight.intensity = 1.5;//Math.sin(radians) + .5;
+	
+	
+	
+	
+	var texture = new THREE.TextureLoader().load( "https://i.imgur.com/LplOZKW.png" );
+
+	var flareColor = new THREE.Color( 0xffffff );
+
+	this.lensFlare = new THREE.LensFlare( texture, 120, 0.0, THREE.AdditiveBlending, flareColor);
+	sunLight.add(this.lensFlare);
+
+	
 
 	this.innerPlane = new THREE.Group();
 	this.innerPlane.add(sunLight);
 	this.outerPlane = new THREE.Group();
 	this.outerPlane.add(this.innerPlane);
 
-	// var moonGeometry = new THREE.SphereGeometry( .2 )
-	// var moonLight = new THREE.PointLight( 0x9badff, 1, 100, 2 )
-	// var moonMaterial = new THREE.MeshStandardMaterial( {
-	// 	emissive: 0xffffee,
-	// 	emissiveIntensity: .2,
-	// 	color: 0x000000
-	// });
-	// moonLight.add( new THREE.Mesh( moonGeometry, moonMaterial ));
-	// moonLight.position.set( 0, -10, 0 );
 
 	//seasonal lights
 		var winterLight = new THREE.AmbientLight( 0xb9c5eb, .05, 100, 2);
-		// winterLight.position.set(0, 10, 0);
 
 		var summerLight = new THREE.AmbientLight( 0xffd505, .1, 100, 2 );
-		// summerLight.position.set(0, 10, 0);
 
-		// var fallLight = new THREE.AmbientLight( 0xff93a5, .5, 100, 2);
-		// fallLight.position.set(0, 10, 0);
-
-		// var springLight = new THREE.AmbientLight( 0x84ff88, .5, 100, 2);
-		// springLight.position.set(0, 10, 0)
 
 	this.update = function(time) {
 		var radians = (Date.now() - this.timeStamp)/1000;
-		// moonLight.intensity = .5;//-Math.sin(radians) + .5;
 		this.innerPlane.rotation.x = time.dayRad;
-		// sunLight.position.y = 15*Math.sin(time.dayRad);
 		this.outerPlane.rotation.z = .384 - .384*Math.sin(time.seasonRad);
-		// moonLight.position.x = -10*Math.cos(radians) + 0;
-		// moonLight.position.y = -10*Math.sin(radians) + 0;
 		ambient.intensity = Math.abs(Math.cos(time.dayRad))*.6 + .9;
 		winterLight.intensity = -Math.sin(time.seasonRad)*.4;
-		//fallLight.intensity = Math.cos((time.seasonRad+Math.PI)/2);
-		summerLight.intensity = Math.sin(time.seasonRad)*.8;// + Math.PI/8)/2;
-		//springLight.intensity = Math.sin((time.seasonRad-Math.PI)/2);
+		
 	};
 
 	this.group = new THREE.Group();
@@ -64,7 +52,5 @@ function Lighting() {
 	this.group.add(this.outerPlane);
 	this.group.add(winterLight);
 	this.group.add(summerLight);
-	//this.group.add(fallLight);
-	//this.group.add(springLight);
-	// this.group.add(moonLight);
+	//this.group.add(this.lensFlare);
 };

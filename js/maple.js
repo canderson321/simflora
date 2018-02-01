@@ -1,5 +1,11 @@
 
 function Geometry() {
+	
+	var texture = new THREE.TextureLoader().load( "https://i.imgur.com/yIYkgvE.jpg?1" );
+	texture.wrapS = THREE.RepeatWrapping;
+	texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set( 1, 3 );
+	
 	Geometry.stem;
 	Geometry.stemMat = new THREE.MeshLambertMaterial( {color: 0xb57566} );
 	
@@ -9,6 +15,7 @@ function Geometry() {
 	
 	Geometry.branch;
 	Geometry.branchMat = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
+	Geometry.branchMatTex = new THREE.MeshLambertMaterial( {map: texture} );
 	
 	
 	Geometry.init = function() {
@@ -36,7 +43,7 @@ function Geometry() {
 		Geometry.leaf.scale(1 / 12.0, 1 / 18.0, 1 / 12.0);
 		Geometry.leaf.translate(0, -0.1, 0);
 		
-		Geometry.branch = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
+		Geometry.branch = new THREE.CylinderGeometry(.07, .1, 1, 5, 1, true );
 		Geometry.branch.translate(0, .5, 0);
 	}
 	
@@ -86,7 +93,7 @@ function MaplePart(parentPart, type) {
 		this.tweenRunning = false;
 
 	} else if (this.level === 1) {
-		material = Geometry.branchMat;
+		material = Geometry.branchMatTex;
 		geometry = Geometry.branch;
 		this.budGrowth = 7;
 		this.numChildren = 6;
@@ -99,7 +106,7 @@ function MaplePart(parentPart, type) {
 		this.childParts.push(new MaplePart(this, "leaf"));
 	} else if (this.level < 6) {
 
-		material = Geometry.branchMat;
+		material = Geometry.branchMatTex;
 		geometry = Geometry.branch;
 		this.budGrowth = 7;
 		this.numChildren = 5;
@@ -114,7 +121,7 @@ function MaplePart(parentPart, type) {
 		this.childParts.push(new MaplePart(this, "leaf"));
 	} else if (this.level === 6) {
 
-		material = Geometry.branchMat;
+		material = Geometry.branchMatTex;
 		geometry = Geometry.branch;
 		this.budGrowth = 6;
 		this.numChildren = 5;
