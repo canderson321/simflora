@@ -154,9 +154,9 @@ MaplePart.prototype.update = function(time, lastTime) {
 
 		if (time.currentSeason === "FA" && time.lastSeason === "SU") {
 			if (!this.tweenRunning) {
-				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: 0.85, g: 1, b: 0 }, 2000);
-				var otherTween = new TWEEN.Tween(this.mesh.material.color).to({r: 1, g: 0.3984375, b: 0 }, 2000);
-				this.tween.delay(Math.random() * 2200);
+				this.tween = new TWEEN.Tween(this.mesh.material.color).to({r: 0.85, g: 1, b: 0 }, Math.floor(2000 / time.timeRate));
+				var otherTween = new TWEEN.Tween(this.mesh.material.color).to({r: 1, g: 0.3984375, b: 0 }, Math.floor(2000 / time.timeRate));
+				this.tween.delay(Math.floor(Math.random() * 2200 / time.timeRate));
 
 				var self = this;
 				otherTween.onComplete(function(obj){
@@ -198,9 +198,9 @@ MaplePart.prototype.update = function(time, lastTime) {
 				//var vector = self.group.worldToLocal( new THREE.Vector3( 0, -1, 0 ) );
 				var vector = self.group.localToWorld( new THREE.Vector3( 0, -1, 0 ) );
 				vector.normalize();
-				childPart.group.position.x += vector.x * 0.015;
-				childPart.group.position.y += vector.y * 0.005;
-				childPart.group.position.z += vector.z * 0.015;
+				childPart.group.position.x += vector.x * 0.015 * time.timeRate;
+				childPart.group.position.y += vector.y * 0.005 * time.timeRate;
+				childPart.group.position.z += vector.z * 0.015 * time.timeRate;
 			} else {
 				childPart.group.position.y = growthFactor * heightFactor;
 				childPart.group.position.x = 0;
