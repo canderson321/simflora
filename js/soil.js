@@ -8,18 +8,19 @@ function Soil() {
 		bottomPoints.push(new THREE.Vector2(i, -2*(1+Math.cos(Math.PI/10*i))));
 	}
 
-	var topGeometry = new THREE.LatheGeometry( topPoints, 12);
+	var topGeometry = new THREE.LatheGeometry( topPoints, 6);
 	var topMaterial = new THREE.MeshLambertMaterial( { color: 0x344b37 } );
 
 	this.top = new THREE.Mesh( topGeometry, topMaterial );
 	this.top.castShadow = true;
 	this.top.receiveShadow = true;
 
-	var rimGeometry = new THREE.TorusGeometry(10, .5, 16, 12);
+	var rimGeometry = new THREE.TorusGeometry(10, .5, 16, 6);
 	// rimGeometry.translate(-.25, 0, 0);
 	// var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
 	this.rim = new THREE.Mesh(rimGeometry, topMaterial);
 	this.rim.rotation.x = Math.PI/2;
+	this.rim.rotation.z = Math.PI/2;
 	this.rim.position.y = -.5;
 
 	this.group = new THREE.Group();
@@ -38,16 +39,17 @@ function Soil() {
 	this.snowTop.receiveShadow = true;
 
 
-	var snowRimGeometry = new THREE.TorusGeometry(10, .45, 16, 12);
+	var snowRimGeometry = new THREE.TorusGeometry(10, .45, 16, 6);
 	this.snowRim = new THREE.Mesh(snowRimGeometry, snowMaterial);
 	this.snowRim.rotation.x = Math.PI/2;
+	this.snowRim.rotation.z = Math.PI/2;
 	this.snowRim.position.y = -.5;
 	// this.snowTop.add(this.snowRim);
 	// this.snowTop.scale.set(1, 1, .95);
 	this.groundSnow.add(this.snowTop);
 	this.groundSnow.add(this.snowRim);
 
-	var bottomGeometry = new THREE.LatheGeometry( bottomPoints, 12 );
+	var bottomGeometry = new THREE.LatheGeometry( bottomPoints, 6 );
 	var bottomMaterial = new THREE.MeshLambertMaterial( { color: 0x917054 } );
 	this.bottom = new THREE.Mesh( bottomGeometry, bottomMaterial );
 	this.bottom.position.y = -.8;
