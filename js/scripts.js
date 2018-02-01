@@ -28,9 +28,11 @@ $(document).ready(function() {
 		growthStart = true;
 		document.getElementById('welcome').style.display = 'none';
 	})
+	
+	var time = new Time();
 
 	document.getElementById("timeRate").oninput = function() {
-		timeRate = document.getElementById("timeRate").value;
+		time.setRate(document.getElementById("timeRate").value);
 	}
 	
 	Geometry();
@@ -68,16 +70,14 @@ $(document).ready(function() {
 	//var audio = new Audio('audio_file.mp3');
 	//audio.play();
 
-	var time = new Time();
-
 	var controls = new THREE.OrbitControls(camera,  renderer.domElement);
 	controls.addEventListener('change', function() {renderer.render(scene, camera);});
 	
 
 	function animate() {
 		requestAnimationFrame(animate);
-		scene.rotation.y += .001;
-		time.update(1);
+		scene.rotation.y += .001 * time.timeRate;
+		time.update();
 		TWEEN.update();
 		soil.update(time)
 		maple.update(time);
