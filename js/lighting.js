@@ -52,7 +52,7 @@ function Lighting() {
 		this.outerPlane.rotation.z = .384 - .384*Math.sin(time.seasonRad);
 		// moonLight.position.x = -10*Math.cos(radians) + 0;
 		// moonLight.position.y = -10*Math.sin(radians) + 0;
-		ambient.intensity = Math.abs(Math.cos(time.dayRad))*.6 + .9;
+		ambient.intensity = Math.abs(Math.cos(time.dayRad))*.6 + 1.4;
 		winterLight.intensity = -Math.sin(time.seasonRad)*.4;
 		//fallLight.intensity = Math.cos((time.seasonRad+Math.PI)/2);
 		summerLight.intensity = Math.sin(time.seasonRad)*.8;// + Math.PI/8)/2;
