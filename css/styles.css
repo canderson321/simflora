@@ -46,6 +46,7 @@ canvas {
 	bottom: 33px;
 	left: 17%;
 	opacity: .4;
+	transition: .3s;
 }
 
 #resetButton:hover {
