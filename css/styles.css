@@ -24,18 +24,19 @@ canvas {
 	color: whitesmoke;
 	text-align: center;
 
+
 }
 
 #hideMessage {
-	height: auto;
+	/*height: auto;*/
 	width: 38%;
-	/* margin-left: -100px; */
 	margin-left: 31%;
 	margin-right: 31%;
 	left: 50%;
 	margin-top: 30px;
-	padding-bottom: 20px
-	border: 1px solid whitesmoke;
+	padding-bottom: 10px;
+	border: 1px solid white;
+	cursor: pointer;
 }
 
 #resetButton {
