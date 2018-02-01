@@ -3,11 +3,11 @@ function rotateAndTilt(x, y) {
 };
 
 function Time() {
-	
+
 	this.time = 0;
 	this.lastTime = 0;
 	this.delta = 0;
-	
+
 	var daysPerYear = 8;
 	this.summerDate = Math.PI / 4;
 	this.fallDate = Math.PI * 3 / 4;
@@ -20,14 +20,14 @@ function Time() {
 	this.dayRad = 0;
 	this.seasonRad = 0;
 
-	this.update = function() {
-		
-		var now = Date.now();
-		this.dayRad = ((now / 3000) % 2) * Math.PI;
-		this.seasonRad = ((now / (3000 * daysPerYear)) % 2) * Math.PI;
+	this.update = function(rate) {
+
+		var now = Date.now(rate);
+		this.dayRad = ((Date.now() / 3000) % 2) * Math.PI * rate;
+		this.seasonRad = ((Date.now() / (3000 * daysPerYear)) % 2) * Math.PI * rate;
 		this.lastSeason = this.currentSeason;
 		this.currentSeason = this.getSeason();
-		
+
 		this.lastTime = this.time;
 		this.time = now;
 		this.delta = this.time - this.lastTime;
@@ -45,6 +45,7 @@ function Time() {
 	}
 	this.update();
 }
+var timeRate = 1;
 
 function Stars() {
 	this.group = new THREE.Group();
@@ -72,6 +73,10 @@ $(document).ready(function() {
 		growthStart = true;
 		document.getElementById('welcome').style.display = 'none';
 	})
+
+	document.getElementById("timeRate").oninput = function() {
+		timeRate = document.getElementById("timeRate").value;
+	}
 
 	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.shadowMap.enabled = true;
@@ -108,13 +113,13 @@ $(document).ready(function() {
 
 	var time = new Time();
 
-	var controls = new THREE.OrbitControls(camera);
+	var controls = new THREE.OrbitControls(camera,  renderer.domElement);
 	controls.addEventListener('change', function() {renderer.render(scene, camera);});
 
 	function animate() {
 		requestAnimationFrame(animate);
 		scene.rotation.y += .001;
-		time.update();
+		time.update(timeRate);
 		TWEEN.update();
 		soil.update(time)
 		maple.update(time);

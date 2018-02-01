@@ -23,11 +23,11 @@ function Soil() {
 	var material = new THREE.MeshLambertMaterial( {color: 0x694f3a} );
 
 	for (var i = 0; i < 90; i++) {
-		var size = Math.random()/2 + .25;
+		var size = Math.random()*.7 + .25;
 		var geometry = new THREE.BoxGeometry(size, size, size);
 		var x = 1 + Math.random() * 6;
 		geometry.translate(x, 0, 0);
-		var clod = new THREE.Mesh( geometry, material );
+		var clod = new THREE.Mesh(geometry, material);
 		clod.position.y = -3*(1+Math.cos(Math.PI/10*x))*Math.random() - .4;
 		clod.quaternion.setFromEuler(rotateAndTilt(Math.random() * 90, Math.random() * 360));
 		this.group.add(clod);
@@ -66,7 +66,7 @@ function Soil() {
 		this.snowGroup.add(snow);
 	};
 
-	this.group.scale.set(.09, .09, .09);
+	this.group.scale.set(.05, .05, .05);
 
 
 	//, ,

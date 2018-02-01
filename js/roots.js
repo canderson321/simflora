@@ -1,6 +1,7 @@
 function RootPart(parentPart) {
 	this.childParts = [];
 	this.timestamp = Date.now();
+	this.growth = .00001
 	this.group = new THREE.Group();
 	this.mesh;
 
@@ -8,7 +9,7 @@ function RootPart(parentPart) {
 
 	if (parentPart === undefined) {
 		this.level = 1;
-		this.terminalAge = 1;
+		this.budGrowth = 1;
 		this.numChildren = 9;
 		this.minAngle = 0;
 		this.maxAngle = 80;
@@ -28,24 +29,24 @@ function RootPart(parentPart) {
 
 			material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 			geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
-			this.terminalAge = 7;
+			this.budGrowth = 7;
 			this.numChildren = 2
 			this.minAngle = 0;
 			this.maxAngle = 30;
-			this.lengthFactor = 1.2 * Math.random();
-			this.widthFactor = 0.4;
+			this.lengthFactor = 1 * Math.random();
+			this.widthFactor = 0.35;
 			this.type = "root";
 
 		} else {
 
 			material = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 			geometry = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
-			this.terminalAge = 7;
+			this.budGrowth = 7;
 			this.numChildren = 1;
 			this.minAngle = 10;
 			this.maxAngle = 30;
-			this.lengthFactor = 1.3*Math.random() + .1;
-			this.widthFactor = 0.4;
+			this.lengthFactor = 1.2*Math.random() + .1;
+			this.widthFactor = 0.3;
 			this.type = "rootlet";
 
 		}
@@ -56,20 +57,23 @@ function RootPart(parentPart) {
 };
 
 RootPart.prototype.update = function(time) {
-	var age = (Date.now() - this.timestamp + 1)/1000;
+	var timeDelta = time.delta/1000;
+	var growthiness = Math.sin(Math.PI/8 + time.seasonRad) + .3;
+	if (growthiness > 0) this.growth = this.growth + timeDelta*growthiness;
 
 	var heightFactor = this.lengthFactor;
 
+	var growthFactor = undefined;
 	if (this.level > 1) {
-		if (age < 40) {
-			var growthFactor = Math.log(age/12+1) / (this.level*1.1 + 1);
+		if (this.growth < 40) {
+			growthFactor = Math.log(this.growth/12+1) / (this.level*1.2 + 1);
 		} else {
-			var growthFactor = Math.log(40/12+1) / (this.level*1.1 + 1);
+			growthFactor = Math.log(40/12+1) / (this.level*1.2 + 1);
 		};
 		this.mesh.scale.set(growthFactor * this.widthFactor, growthFactor * heightFactor, growthFactor * this.widthFactor);
 	};
 
-	while (age > this.terminalAge && this.childParts.length < this.numChildren && this.level <= 5) {
+	while (this.growth > this.budGrowth && this.childParts.length < this.numChildren && this.level <= 5) {
 		this.childParts.push(new RootPart(this));
 	};
 
