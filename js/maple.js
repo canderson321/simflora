@@ -1,46 +1,46 @@
-var geometries = new Geometry();
+
 function Geometry() {
-	this.stem;
-	this.stemMat = new THREE.MeshLambertMaterial( {color: 0xb57566} );
+	Geometry.stem;
+	Geometry.stemMat = new THREE.MeshLambertMaterial( {color: 0xb57566} );
 	
-	this.leaf;
-	this.leafMat = new THREE.MeshStandardMaterial( {color: 0x68ff03} );
-	this.leafMat.side = THREE.DoubleSide;
+	Geometry.leaf;
+	Geometry.leafMat = new THREE.MeshStandardMaterial( {color: 0x68ff03} );
+	Geometry.leafMat.side = THREE.DoubleSide;
 	
-	this.branch;
-	this.branchMat = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
+	Geometry.branch;
+	Geometry.branchMat = new THREE.MeshLambertMaterial( {color: 0xa89d81} );
 	
 	
-	this.init = function() {
-		this.stem = new THREE.CylinderGeometry(.014, .04, 0.5, 3, 1, true );
-		this.stem.translate(0, 0.25, 0);
+	Geometry.init = function() {
+		Geometry.stem = new THREE.CylinderGeometry(.014, .04, 0.5, 3, 1, true );
+		Geometry.stem.translate(0, 0.25, 0);
 		
-		this.leaf = new THREE.Geometry();
-		this.leaf.vertices.push( new THREE.Vector3( 0, 24, 0 ) ); // 0
-		this.leaf.vertices.push( new THREE.Vector3( 3, 18, 0 ) ); // 1
-		this.leaf.vertices.push( new THREE.Vector3( 8, 20, 0 ) ); // 2
-		this.leaf.vertices.push( new THREE.Vector3( 5, 14, 0 ) ); // 3
-		this.leaf.vertices.push( new THREE.Vector3( 7, 10, 0 ) ); // 4
-		this.leaf.vertices.push( new THREE.Vector3( 0, 11, 0 ) ); // 5
+		Geometry.leaf = new THREE.Geometry();
+		Geometry.leaf.vertices.push( new THREE.Vector3( 0, 24, 0 ) ); // 0
+		Geometry.leaf.vertices.push( new THREE.Vector3( 3, 18, 0 ) ); // 1
+		Geometry.leaf.vertices.push( new THREE.Vector3( 8, 20, 0 ) ); // 2
+		Geometry.leaf.vertices.push( new THREE.Vector3( 5, 14, 0 ) ); // 3
+		Geometry.leaf.vertices.push( new THREE.Vector3( 7, 10, 0 ) ); // 4
+		Geometry.leaf.vertices.push( new THREE.Vector3( 0, 11, 0 ) ); // 5
 
-		this.leaf.vertices.push( new THREE.Vector3( -3, 18, 0 ) ); // 6
-		this.leaf.vertices.push( new THREE.Vector3( -8, 20, 0 ) ); // 7
-		this.leaf.vertices.push( new THREE.Vector3( -5, 14, 0 ) ); // 8
-		this.leaf.vertices.push( new THREE.Vector3( -7, 10, 0 ) ); // 9
+		Geometry.leaf.vertices.push( new THREE.Vector3( -3, 18, 0 ) ); // 6
+		Geometry.leaf.vertices.push( new THREE.Vector3( -8, 20, 0 ) ); // 7
+		Geometry.leaf.vertices.push( new THREE.Vector3( -5, 14, 0 ) ); // 8
+		Geometry.leaf.vertices.push( new THREE.Vector3( -7, 10, 0 ) ); // 9
 
-		this.leaf.faces.push( new THREE.Face3( 0, 4, 5 ) );
-		this.leaf.faces.push( new THREE.Face3( 0, 5, 9 ) );
-		this.leaf.faces.push( new THREE.Face3( 1, 2, 3 ) );
-		this.leaf.faces.push( new THREE.Face3( 6, 8, 7 ) );
+		Geometry.leaf.faces.push( new THREE.Face3( 0, 4, 5 ) );
+		Geometry.leaf.faces.push( new THREE.Face3( 0, 5, 9 ) );
+		Geometry.leaf.faces.push( new THREE.Face3( 1, 2, 3 ) );
+		Geometry.leaf.faces.push( new THREE.Face3( 6, 8, 7 ) );
 
-		this.leaf.scale(1 / 12.0, 1 / 18.0, 1 / 12.0);
-		this.leaf.translate(0, -0.1, 0);
+		Geometry.leaf.scale(1 / 12.0, 1 / 18.0, 1 / 12.0);
+		Geometry.leaf.translate(0, -0.1, 0);
 		
-		this.branch = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
-		this.branch.translate(0, .5, 0);
+		Geometry.branch = new THREE.CylinderGeometry(.07, .1, 1, 3, 1, true );
+		Geometry.branch.translate(0, .5, 0);
 	}
 	
-	this.init();
+	Geometry.init();
 }
 
 
@@ -72,12 +72,12 @@ function MaplePart(parentPart, type) {
 		this.level = 5;
 		this.budGrowth = 5;
 		
-		material = geometries.stemMat;
-		geometry = geometries.stem;
+		material = Geometry.stemMat;
+		geometry = Geometry.stem;
 		var stem = new THREE.Mesh(geometry, material);
 
-		material = geometries.leafMat.clone();
-		geometry = geometries.leaf;
+		material = Geometry.leafMat.clone();
+		geometry = Geometry.leaf;
 
 		this.numChildren = 0;
 		this.lengthFactor = .6;
@@ -86,8 +86,8 @@ function MaplePart(parentPart, type) {
 		this.tweenRunning = false;
 
 	} else if (this.level === 1) {
-		material = geometries.branchMat;
-		geometry = geometries.branch;
+		material = Geometry.branchMat;
+		geometry = Geometry.branch;
 		this.budGrowth = 7;
 		this.numChildren = 6;
 		this.minAngle = 20;
@@ -99,8 +99,8 @@ function MaplePart(parentPart, type) {
 		this.childParts.push(new MaplePart(this, "leaf"));
 	} else if (this.level < 6) {
 
-		material = geometries.branchMat;
-		geometry = geometries.branch;
+		material = Geometry.branchMat;
+		geometry = Geometry.branch;
 		this.budGrowth = 7;
 		this.numChildren = 5;
 		this.minAngle = 20;
@@ -114,8 +114,8 @@ function MaplePart(parentPart, type) {
 		this.childParts.push(new MaplePart(this, "leaf"));
 	} else if (this.level === 6) {
 
-		material = geometries.branchMat;
-		geometry = geometries.branch;
+		material = Geometry.branchMat;
+		geometry = Geometry.branch;
 		this.budGrowth = 6;
 		this.numChildren = 5;
 		this.minAngle = 90;
@@ -198,9 +198,9 @@ MaplePart.prototype.update = function(time, lastTime) {
 				//var vector = self.group.worldToLocal( new THREE.Vector3( 0, -1, 0 ) );
 				var vector = self.group.localToWorld( new THREE.Vector3( 0, -1, 0 ) );
 				vector.normalize();
-				childPart.group.position.x += vector.x * 0.005;
+				childPart.group.position.x += vector.x * 0.015;
 				childPart.group.position.y += vector.y * 0.005;
-				childPart.group.position.z += vector.z * 0.005;
+				childPart.group.position.z += vector.z * 0.015;
 			} else {
 				childPart.group.position.y = growthFactor * heightFactor;
 				childPart.group.position.x = 0;
