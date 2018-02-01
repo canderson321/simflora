@@ -9,7 +9,7 @@ function Soil() {
 	}
 
 	var topGeometry = new THREE.LatheGeometry( topPoints, 12);
-	var topMaterial = new THREE.MeshLambertMaterial( { color: 0x456348 } );
+	var topMaterial = new THREE.MeshLambertMaterial( { color: 0x344b37 } );
 
 	this.top = new THREE.Mesh( topGeometry, topMaterial );
 	this.top.castShadow = true;
@@ -60,7 +60,7 @@ function Soil() {
 	// this.group.add(this.snow)
 	this.group.add(this.bottom);
 
-	var material = new THREE.MeshLambertMaterial( {color: 0x694f3a} );
+	var material = new THREE.MeshLambertMaterial( {color: 0x423224} );
 
 	for (var i = 0; i < 90; i++) {
 		var size = Math.random()*.7 + .25;
