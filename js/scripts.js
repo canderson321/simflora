@@ -22,9 +22,9 @@ function Time() {
 
 	this.update = function(rate) {
 
-		var now = Date.now(rate);
-		this.dayRad = ((Date.now() / 3000) % 2) * Math.PI * rate;
-		this.seasonRad = ((Date.now() / (3000 * daysPerYear)) % 2) * Math.PI * rate;
+		var now = Date.now();
+		this.dayRad = ((now * rate / 3000) % 2) * Math.PI;
+		this.seasonRad = ((now * rate / (3000 * daysPerYear)) % 2) * Math.PI;
 		this.lastSeason = this.currentSeason;
 		this.currentSeason = this.getSeason();
 
@@ -79,6 +79,8 @@ $(document).ready(function() {
 	}
 
 	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.shadowMap.enabled = true;
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 	renderer.setSize( window.innerWidth, window.innerHeight);
 	// renderer.shadowMapEnabled = true;
 	document.body.appendChild( renderer.domElement);

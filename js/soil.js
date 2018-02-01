@@ -12,7 +12,8 @@ function Soil() {
 	var topMaterial = new THREE.MeshLambertMaterial( { color: 0x508552 } );
 
 	this.top = new THREE.Mesh( topGeometry, topMaterial );
-
+	top.castShadow = true;
+	top.receiveShadow = true;
 	var snowMaterial = new THREE.MeshLambertMaterial( { color: 0xffffff } );
 	this.snow = new THREE.Mesh( topGeometry, snowMaterial );
 	this.snow.scale.set(1, 1.2, 1);
@@ -29,6 +30,8 @@ function Soil() {
 	var bottomMaterial = new THREE.MeshLambertMaterial( { color: 0x917054 } );
 	this.bottom = new THREE.Mesh( bottomGeometry, bottomMaterial );
 	this.bottom.position.y = -.8;
+	this.bottom.castShadow = true;
+	//bottom.receiveShadow = true;
 
 	this.group = new THREE.Group();
 	this.group.add(this.top);
@@ -48,6 +51,8 @@ function Soil() {
 		clod.position.y = -3*(1+Math.cos(Math.PI/10*x))*Math.random() - .4;
 		clod.quaternion.setFromEuler(rotateAndTilt(Math.random() * 90, Math.random() * 360));
 		this.group.add(clod);
+		//clod.castShadow = true;
+		clod.receiveShadow = true;
 
 	};
 
@@ -68,6 +73,9 @@ function Soil() {
 
 		var stone = new THREE.Mesh( stoneGeometry, stoneMaterial );
 		var snow = new THREE.Mesh(snowGeometry, snowMaterial);
+
+		stone.castShadow = true;
+
 
 		position = Math.cos(Math.PI/20*x);
 		eu = rotateAndTilt(Math.random() * 90, Math.random() * 360);
