@@ -49,22 +49,21 @@ var timeRate = 1;
 
 function Stars() {
 	this.group = new THREE.Group();
-	var material = new THREE.MeshStandardMaterial( {
-		emissive: 0xffffee,
-		emissiveIntensity: 1,
-		color: 0x000000
-	});
+	var material = new THREE.MeshStandardMaterial( {emissive: 0xffffee, emissiveIntensity: 1, color: 0x000000 });
+	var starField = new THREE.Geometry();
 	for (var i = 0; i < 1000; i++) {
 		var radius = .05//Math.random()*.005 + .005;
 		var geometry = new THREE.SphereGeometry(radius, 2, 2 );
 		var distance = 7 + Math.random()*15;
 		geometry.translate(distance, distance, distance);
-		var star = new THREE.Mesh( geometry, material );
-		// star.position.y = distance;
+		var star = new THREE.Mesh( geometry );
 		star.quaternion.setFromEuler(rotateAndTilt(Math.random() * 360, Math.random() * 360));
-		this.group.add(star);
-
+		star.updateMatrix();
+		starField.merge(star.geometry, star.matrix);
 	};
+	var bufferGeo = new THREE.BufferGeometry();
+	bufferGeo.fromGeometry(starField)
+	this.group.add(new THREE.Mesh(bufferGeo, material));
 }
 var growthStart = false;
 
